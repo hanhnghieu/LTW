@@ -2,9 +2,9 @@
   "name": "minty-diet-web",
   "version": "1.0.0",
   "description": "Sổ tay dinh dưỡng Minty Diet",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "express": "^5.2.1",
