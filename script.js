@@ -1,25 +1,20 @@
 const APP_ID = '6e447c8e'; 
 const APP_KEY = 'ecff04668de1e5b3e2e610b54eb0b914s';
 
-// ==========================================
 // 1. ĐIỀU HƯỚNG TAB GIAO DIỆN
-// ==========================================
 function showSection(sectionId) {
-    // Ẩn tất cả các nội dung section
     const sections = document.querySelectorAll('.tab-content');
     sections.forEach(section => {
         section.style.display = 'none';
         section.classList.remove('active');
     });
 
-    // Hiển thị đúng section được chọn
     const activeSection = document.getElementById(sectionId);
     if (activeSection) {
         activeSection.style.display = 'block';
         activeSection.classList.add('active');
     }
 
-    // Cập nhật gạch chân trên menu điều hướng
     const navLinks = document.querySelectorAll('.nav-links a');
     navLinks.forEach(link => {
         link.classList.remove('active');
@@ -29,7 +24,6 @@ function showSection(sectionId) {
         event.currentTarget.classList.add('active');
     }
 
-    // Nếu bấm sang tab Quản lý dinh dưỡng thì tự load bảng của ngày đang chọn
     if (sectionId === 'food-manager') {
         const dateInput = document.getElementById('history-date');
         if (dateInput && dateInput.value) {
@@ -38,9 +32,7 @@ function showSection(sectionId) {
     }
 }
 
-// ==========================================
 // 2. CẬP NHẬT LỜI CHÀO THEO THỜI GIAN THỰC
-// ==========================================
 function updateGreeting() {
     const greetingElement = document.getElementById('greeting');
     const heroSection = document.getElementById('hero-bg');
@@ -49,7 +41,6 @@ function updateGreeting() {
     const hour = new Date().getHours();
     let message, bgColor;
 
-    // Phân chia khung giờ chuẩn xác trong ngày
     if (hour >= 5 && hour < 12) {
         message = "Chào buổi sáng ✨";
         bgColor = "linear-gradient(135deg, #e0f2f1 0%, #80cbc4 100%)";
@@ -61,7 +52,6 @@ function updateGreeting() {
         bgColor = "linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%)";
     }
 
-    // Kiểm tra trạng thái đăng nhập để ghép tên
     const savedName = localStorage.getItem('db_fullname');
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
@@ -74,9 +64,7 @@ function updateGreeting() {
     if (heroSection) heroSection.style.background = bgColor;
 }
 
-// ==========================================
 // 3. XỬ LÝ HỆ THỐNG THÀNH VIÊN (AUTH)
-// ==========================================
 const registerForm = document.getElementById('registerForm');
 if (registerForm) {
     registerForm.onsubmit = function(e) {
@@ -122,9 +110,7 @@ if (loginForm) {
     };
 }
 
-// ==========================================
 // 4. HIỂN THỊ DANH SÁCH MÓN ĂN THAM KHẢO (API)
-// ==========================================
 async function showDishes() {
     try {
         const res = await fetch('/api/foods');
@@ -156,9 +142,7 @@ async function showDishes() {
     } catch (err) { console.error("Lỗi lấy dữ liệu:", err); }
 }
 
-// ==========================================
 // 5. QUẢN LÝ NHẬT KÝ DINH DƯỠNG (LOCALSTORAGE)
-// ==========================================
 const addFoodForm = document.getElementById('addFoodForm');
 if (addFoodForm) {
     addFoodForm.onsubmit = function(e) {
@@ -261,9 +245,7 @@ function loadDailyMenu() {
     }
 }
 
-// ==========================================
 // 6. SỬA / XÓA MÓN THAM KHẢO TRÊN API
-// ==========================================
 async function editFood(id, oldName, oldPortion) {
     const newName = prompt("Nhập tên món mới:", oldName);
     const newPortion = prompt("Nhập khẩu phần mới:", oldPortion);
@@ -286,33 +268,42 @@ async function deleteFood(id) {
     }
 }
 
-// ==========================================
-// 7. QUẢN LÝ ĐÓNG MỞ MODAL VÀ KHỞI TẠO HỆ THỐNG
-// ==========================================
+// 7. QUẢN LÝ ĐÓNG MỞ MODAL VÀ CHUYỂN ĐỔI FORM (ĐÃ TỐI ƯU)
 function toggleModal(id) {
     const modal = document.getElementById(id);
     if (modal) modal.style.display = modal.style.display === "block" ? "none" : "block";
 }
 
+function switchAuth(type) {
+    const loginModal = document.getElementById('modal-login');
+    const registerModal = document.getElementById('modal-register');
+    if (type === 'register') {
+        if (loginModal) loginModal.style.display = 'none';
+        if (registerModal) registerModal.style.display = 'block';
+    } else if (type === 'login') {
+        if (registerModal) registerModal.style.display = 'none';
+        if (loginModal) loginModal.style.display = 'block';
+    }
+}
+
 window.onclick = (e) => { 
-    if (e.target.className === 'modal') e.target.style.display = 'none'; 
+    const modalLogin = document.getElementById('modal-login');
+    const modalRegister = document.getElementById('modal-register');
+    const modalAdd = document.getElementById('modal-add');
+    if (e.target === modalLogin) modalLogin.style.display = 'none';
+    if (e.target === modalRegister) modalRegister.style.display = 'none';
+    if (e.target === modalAdd) modalAdd.style.display = 'none';
 };
 
 // ĐỒNG BỘ TOÀN BỘ SỰ KIỆN KHI TRANG WEB TẢI XONG
 window.onload = function() {
-    // 1. Đồng bộ ngày tháng ô input về ngày hôm nay
     const dateInput = document.getElementById('history-date');
     const todayStr = new Date().toLocaleDateString('en-CA');
     if (dateInput) {
         dateInput.value = todayStr;
     }
 
-    // 2. Kích hoạt giao diện lời chào
     updateGreeting();
-
-    // 3. Đổ dữ liệu món ăn tham khảo từ API
     showDishes();
-
-    // 4. Quét bộ nhớ máy để hiển thị nhật ký ăn uống hôm nay
     renderDailyTable(todayStr);
 };
