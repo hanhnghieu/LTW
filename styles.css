@@ -111,6 +111,34 @@ body { background-color: var(--mint-light); color: var(--text-color); margin: 0;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     z-index: 1000;
 }
+/* Định vị container bao quanh ô mật khẩu */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Đảm bảo ô input chiếm hết chiều rộng */
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* Chừa khoảng trống bên phải để không bị chữ đè lên con mắt */
+}
+
+/* Thao tác căn chỉnh và tạo hiệu ứng cho con mắt */
+.password-wrapper .toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    transition: color 0.2s ease;
+}
+
+/* Đổi màu icon khi rê chuột vào cho đẹp */
+.password-wrapper .toggle-password:hover {
+    color: #43a047;
+}
 /* Thiết kế nút nổi (Floating Action Button) */
 .fab-btn {
     position: fixed;

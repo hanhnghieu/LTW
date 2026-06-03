@@ -285,6 +285,23 @@ function switchAuth(type) {
         if (loginModal) loginModal.style.display = 'block';
     }
 }
+// Hàm bật/tắt ẩn hiện mật khẩu và đổi icon con mắt
+function togglePasswordVisibility(inputId, iconElement) {
+    const passwordInput = document.getElementById(inputId);
+    if (!passwordInput) return;
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        // Đổi icon thành mắt gạch chéo (ẩn đi)
+        iconElement.classList.remove("fa-eye");
+        iconElement.classList.add("fa-eye-slash");
+    } else {
+        passwordInput.type = "password";
+        // Đổi icon thành mắt bình thường (hiện lên)
+        iconElement.classList.remove("fa-eye-slash");
+        iconElement.classList.add("fa-eye");
+    }
+}
 
 window.onclick = (e) => { 
     const modalLogin = document.getElementById('modal-login');
