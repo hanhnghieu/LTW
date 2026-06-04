@@ -59,7 +59,20 @@ body { background-color: var(--mint-light); color: var(--text-color); margin: 0;
 .search-bar button { background: var(--mint-dark); color: white; border: none; padding: 10px 25px; border-radius: 30px; cursor: pointer; }
 
 /* CARD MÓN ĂN */
-.grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-top: 2rem; }
+.grid-container {
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fill,
+        minmax(350px,1fr)
+    );
+
+    gap:30px;
+
+    margin-top:2rem;
+}
 
 .food-card {
     background: var(--white);
@@ -68,6 +81,45 @@ body { background-color: var(--mint-light); color: var(--text-color); margin: 0;
     position: relative;
     box-shadow: var(--shadow);
     transition: 0.3s;
+}
+.food-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,.08);
+
+    transition:.3s;
+}
+
+.food-card:hover{
+
+    transform:translateY(-8px);
+}
+
+.food-card img{
+
+    width:100%;
+
+    height:220px;
+
+    object-fit:cover;
+}
+
+.card-content{
+
+    padding:20px;
+}
+
+.card-content h3{
+
+    margin-top:0;
+
+    color:#2e7d32;
 }
 
 .food-card:hover { transform: translateY(-10px); }

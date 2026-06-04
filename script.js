@@ -142,18 +142,46 @@ async function showDishes() {
         grid.innerHTML = data.map(f => {
             const id = f.MaMonAn || f.mamonan;
             return `
-                <div class="food-card">
-                    <div class="card-content">
-                        <h3>${f.TenMonAn || 'Chưa có tên'}</h3>
-                        <p><strong>🔥 Năng lượng:</strong> ${f.Calo || 0} kcal</p>
-                        <p><strong>👥 Khẩu phần:</strong> ${f.KhauPhan || 1} người</p>
-                        <p class="desc">${f.MoTa || ''}</p>
-                        <div class="card-actions">
-                            <button class="btn-edit" onclick="editFood(${id}, '${f.TenMonAn}', ${f.KhauPhan})">Sửa</button>
-                            <button class="btn-delete" onclick="deleteFood(${id})">Xóa</button>
-                        </div>
-                    </div>
-                </div>`;
+<div class="food-card">
+
+    <img
+    src="${f.HinhAnh || 'images/default-food.jpg'}"
+    alt="${f.TenMonAn}">
+
+    <div class="card-content">
+
+        <h3>${f.TenMonAn || 'Chưa có tên'}</h3>
+
+        <p>
+        🔥 ${f.Calo || 0} kcal
+        </p>
+
+        <p>
+        👨‍🍳 ${f.PhuongPhap || 'Chưa cập nhật'}
+        </p>
+
+        <p>
+        📝 ${f.MoTa || ''}
+        </p>
+
+        <div class="card-actions">
+
+            <button
+            class="btn-edit"
+            onclick="editFood(${id},
+            '${f.TenMonAn}',
+            ${f.KhauPhan})">Sửa</button>
+
+            <button
+            class="btn-delete"onclick="deleteFood(${id})">Xóa
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+`;
         }).join('');
     } catch (err) { console.error("Lỗi lấy dữ liệu:", err); }
 }
@@ -271,26 +299,61 @@ function loadDailyMenu() {
 }
 
 // 6. SỬA / XÓA MÓN THAM KHẢO TRÊN API
-async function editFood(id, oldName, oldPortion) {
-    const newName = prompt("Nhập tên món mới:", oldName);
-    const newPortion = prompt("Nhập khẩu phần mới:", oldPortion);
-    if (!newName || !newPortion) return;
+async function showDishes() {
 
-    try {
-        await fetch(`/api/foods/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: newName, portion: parseInt(newPortion) })
-        });
-        showDishes();
-    } catch (err) { console.error(err); }
-}
+    const data = [
 
-async function deleteFood(id) {
-    if (confirm("Xóa thật nhé?")) {
-        await fetch(`/api/foods/${id}`, { method: 'DELETE' });
-        showDishes();
+    {
+        TenMonAn:"Phở bò",
+        Calo:500,
+        PhuongPhap:"Luộc",
+        MoTa:"Phở bò truyền thống",
+        HinhAnh:"images/pho.jpg"
+    },
+
+    {
+        TenMonAn:"Cơm tấm",
+        Calo:650,
+        PhuongPhap:"Nướng",
+        MoTa:"Cơm tấm sườn",
+        HinhAnh:"images/comtam.jpg"
+    },
+
+    {
+        TenMonAn:"Salad ức gà",
+        Calo:250,
+        PhuongPhap:"Luộc",
+        MoTa:"Thực đơn giảm cân",
+        HinhAnh:"images/salad.jpg"
     }
+
+    ];
+
+    const grid = document.getElementById('dishGrid');
+
+    if (!grid) return;
+
+    grid.innerHTML = data.map(f => `
+        <div class="food-card">
+
+            <img
+            src="${f.HinhAnh}"
+            alt="${f.TenMonAn}">
+
+            <div class="card-content">
+
+                <h3>${f.TenMonAn}</h3>
+
+                <p>🔥 ${f.Calo} kcal</p>
+
+                <p>👨‍🍳 ${f.PhuongPhap}</p>
+
+                <p>${f.MoTa}</p>
+
+            </div>
+
+        </div>
+    `).join('');
 }
 
 // 7. QUẢN LÝ ĐÓNG MỞ MODAL VÀ CHUYỂN ĐỔI FORM (ĐÃ TỐI ƯU)
