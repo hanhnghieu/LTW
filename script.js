@@ -421,6 +421,35 @@ function calculateBMI(){
         status = "Béo phì";
 
     }
+    const statusElement =
+document.getElementById(
+"bmi-status"
+);
+
+if(bmi < 18.5){
+
+    statusElement.style.background =
+    "#ffe082";
+
+}
+else if(bmi < 25){
+
+    statusElement.style.background =
+    "#a5d6a7";
+
+}
+else if(bmi < 30){
+
+    statusElement.style.background =
+    "#ffcc80";
+
+}
+else{
+
+    statusElement.style.background =
+    "#ef9a9a";
+
+}
 
     document.getElementById(
     "bmi-number"

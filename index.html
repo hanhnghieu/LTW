@@ -112,14 +112,23 @@
 
 <h2>⚖️ Tính chỉ số BMI</h2>
 
-<div class="form-group">
-    <label>Chiều cao (m)</label>
-    <input type="number" id="height" step="0.01">
-</div>
+<div class="bmi-inputs">
 
-<div class="form-group">
-    <label>Cân nặng (kg)</label>
-    <input type="number" id="weight">
+    <div class="form-group">
+        <label>📏 Chiều cao (m)</label>
+        <input
+        type="number"
+        id="height"
+        step="0.01">
+    </div>
+
+    <div class="form-group">
+        <label>⚖️ Cân nặng (kg)</label>
+        <input
+        type="number"
+        id="weight">
+    </div>
+
 </div>
 
 <button onclick="calculateBMI()">
