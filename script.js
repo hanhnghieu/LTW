@@ -414,10 +414,14 @@ function calculateBMI(){
     }
 
     document.getElementById(
-        "bmiResult"
+    "bmi-number"
     ).innerHTML =
-    `BMI = ${bmi.toFixed(2)}
-     (${status})`;
+    bmi.toFixed(2);
+
+    document.getElementById(
+    "bmi-status"
+    ).innerHTML =
+    status;
 }
 function drawChart(){
 

@@ -257,6 +257,39 @@ body { background-color: var(--mint-light); color: var(--text-color); margin: 0;
     from { transform: translateY(-50px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
+/*bmicard*/
+.bmi-card{
+
+    margin-top:20px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    text-align:center;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+#bmi-number{
+
+    font-size:50px;
+
+    font-weight:bold;
+
+    color:#43a047;
+}
+
+#bmi-status{
+
+    margin-top:10px;
+
+    font-size:22px;
+
+    font-weight:600;
+}
 /* Style cho nút Đăng nhập & Đăng ký trên Navbar */
 .nav-links li a.btn-login {
     color: var(--mint-dark);
