@@ -3,86 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sổ Tay Dinh Dưỡng Online</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="public/styles.css">
+    <title>Sổ Tay Dinh Dưỡng - Minty Diet</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2=family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
+    <!-- THANH MENU -->
     <nav class="navbar">
-        <div class="logo">🌿 Sổ Tay Dinh Dưỡng</div>
+        <div class="logo">🌿 Dinh<span>Dưỡng</span></div>
         <ul class="nav-links">
-            <li><a href="#" class="active" onclick="showSection('home')">Trang Chủ</a></li>
-            <li><a href="#" onclick="showSection('food-manager')">Quản Lý Dinh Dưỡng</a></li>
-            <li><a href="javascript:void(0)" class="btn-login" id="nav-login-btn" onclick="toggleModal('modal-login')">Đăng nhập</a></li>
-            <li><a href="javascript:void(0)" class="btn-register" id="nav-register-btn" onclick="toggleModal('modal-register')">Đăng ký</a></li>
-            <li><a href="javascript:void(0)" class="btn-logout" id="nav-logout-btn" onclick="handleLogout()" style="display: none;">Đăng xuất</a></li>
-        </ul>
+        <li><a href="#" class="active" onclick="showSection('home')">Trang Chủ</a></li>
+        <li><a href="#" onclick="showSection('food-manager')">Quản Lý Dinh Dưỡng</a></li>
+        <li><a href="javascript:void(0)" class="btn-login" id="nav-login-btn" onclick="toggleModal('modal-login')">Đăng nhập</a></li>
+        <li><a href="javascript:void(0)" class="btn-register" id="nav-register-btn" onclick="toggleModal('modal-register')">Đăng ký</a></li>
+        <li><a href="javascript:void(0)" class="btn-logout" id="nav-logout-btn" onclick="handleLogout()" style="display: none;">Đăng xuất</a></li>
+    </ul>
     </nav>
 
-    <header class="hero" id="hero-bg">
-        <h1 id="greeting">Chào mừng bạn! ✨</h1>
-        <p>Ghi chép thông minh - Kiểm soát calo - Sống khỏe mỗi ngày</p>
-    </header>
-
+    <!-- NỘI DUNG CHÍNH -->
     <main class="container">
-        
+        <!-- HEADER LỜI CHÀO -->
+        <header class="hero-section" id="hero-bg">
+            <div class="greeting-container">
+                <span id="weather-icon"></span>
+                <h1 id="greeting">Chào buổi sáng!</h1>
+            </div>
+            <p id="greeting-sub">Hôm nay bạn muốn nấu món gì cho khỏe mạnh?</p>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Tìm tên món hoặc nguyên liệu...">
+                <button onclick="searchFood()">Tìm kiếm</button>
+            </div>
+        </header>
+
+        <!-- NỘI DUNG CÁC TAB -->
+
+        <!-- TAB 1: TRANG CHỦ -->
         <section id="home" class="tab-content">
+            <!-- KHU VỰC GỢI Ý THÔNG MINH -->
             <div class="suggestion-box" id="smart-suggestion">
                 <h3>💡 Gợi ý thực đơn hôm nay</h3>
                 <p id="suggestion-text">Đang phân tích dữ liệu dinh dưỡng hôm qua của bạn...</p>
-                <div class="grid-container" id="suggested-dishes" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;"></div>
+                <div class="grid-container" id="suggested-dishes">
+                    <!-- Các món gợi ý sẽ tự động nhảy vào đây từ JavaScript -->
+                </div>
             </div>
 
             <hr style="margin: 30px 0; border: 0; border-top: 1px dashed #ccc;">
 
-            <div class="control-panel">
-                <div class="panel-title">
-                    <h2>📋 Danh sách món ăn tham khảo</h2>
-                </div>
-                <div class="panel-actions">
-                    <button class="btn-add-new" onclick="toggleModal('modal-add')">
-                        <i class="fas fa-plus-circle"></i> Thêm món ăn mới
-                    </button>
+            <div class="section-header">
+                <h2>📋 Danh sách món ăn tham khảo</h2>
+            </div>
+            <div class="grid-container" id="dishGrid">
+                <!-- Nơi hiển thị tất cả món ăn từ JS -->
+            </div>
+        </section>
+
+        <!-- TAB 2: QUẢN LÝ DINH DƯỠNG (NHẬT KÝ) -->
+        <section id="food-manager" class="tab-content" style="display: none;">
+            <div class="tracker-header">
+                <h2>🔥 Nhật Ký Dinh Dưỡng</h2>
+                <div id="calorie-status" class="calorie-badge">
+                    Tổng Calo hôm nay: <span id="total-calo-value">0</span> kcal <i class="fas fa-fire"></i>
                 </div>
             </div>
 
-            <div class="grid-container" id="dishGrid"></div>
-        </section>
+            <!-- Chọn ngày để xem lại thực đơn -->
+            <div class="date-picker-container">
+                <label for="history-date">Chọn ngày:</label>
+                <input type="date" id="history-date" onchange="loadDailyMenu()">
+            </div>
 
-        <section id="food-manager" class="tab-content" style="display: none;">
-            <div class="card">
-                <h2>🔥 Nhật Ký Dinh Dưỡng Hằng Ngày</h2>
-                
-                <div class="filter-group" style="margin: 20px 0; display: flex; align-items: center; gap: 10px;">
-                    <label for="history-date"><strong>Chọn ngày xem nhật ký:</strong></label>
-                    <input type="date" id="history-date" onchange="loadDailyMenu()" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
-                </div>
-
-                <div id="calorie-status" class="calorie-badge status-green">
-                    Tổng Calo đã nạp: <span id="total-calo-value">0</span> kcal 🍏
-                </div>
-
-                <table class="food-table">
+            <div class="daily-log">
+                <table class="nutrition-table">
                     <thead>
                         <tr>
                             <th>Thời gian</th>
                             <th>Món ăn</th>
-                            <th>Lượng Calo (kcal)</th>
+                            <th>Lượng Calo</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="daily-menu-body">
-                        </tbody>
+                        <!-- Data dữ liệu đổ vào từ LocalStorage -->
+                    </tbody>
                 </table>
             </div>
         </section>
     </main>
 
-    <div id="modal-login" class="modal">
+    <!-- NÚT BẤM NỔI (+) GÓC DƯỚI BÊN PHẢI -->
+    <button class="fab-btn" onclick="toggleModal('modal-add')" title="Thêm món ăn mới">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- MODAL THÊM MÓN ĂN -->
+    <div id="modal-add" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="toggleModal('modal-login')">&times;</span>
-            <h2>🔐 Đăng Nhập Hệ Thống</h2>
+            <span class="close" onclick="toggleModal('modal-add')">&times;</span>
+            <h2>🥗 Thêm món ăn mới</h2>
+            <form id="addFoodForm">
+                <div class="form-group">
+                    <label>Tên món ăn:</label>
+                    <input type="text" id="foodName" required placeholder="VD: Mì ý sốt bò băm">
+                </div>
+                <div class="form-row" style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Khẩu phần (người):</label>
+                        <input type="number" id="foodPortion" value="1" min="1">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Lượng Calo (kcal):</label>
+                        <input type="number" id="foodCalo" value="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả món ăn:</label>
+                    <textarea id="foodDesc" rows="3" placeholder="Nhập cách nấu hoặc nguyên liệu..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Lưu vào hệ thống</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ĐĂNG NHẬP -->
+    <div id="modal-login" class="modal">
+        <div class="modal-content auth-box">
+            <span class="close" onclick="toggleModal('modal-login')">&times;</span>
+            <h2>🔐 Đăng Nhập</h2>
             <form id="loginForm">
                 <div class="form-group">
                     <label>Tên đăng nhập:</label>
@@ -90,72 +139,53 @@
                 </div>
                 <div class="form-group">
                     <label>Mật khẩu:</label>
-                    <div class="password-wrapper" style="position: relative; display: flex; align-items: center;">
-                        <input type="password" id="loginPass" required placeholder="Nhập mật khẩu..." style="width: 100%; padding-right: 40px;">
-                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('loginPass', this)" style="position: absolute; right: 15px; cursor: pointer; color: #777;"></i>
+                    <div class="password-wrapper">
+                        <input type="password" id="loginPass" required placeholder="Nhập mật khẩu...">
+                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('loginPass', this)"></i>
                     </div>
                 </div>
                 <button type="submit" class="btn-submit">Đăng nhập ngay</button>
-                <p style="text-align: center; margin-top: 15px; font-size: 14px;">
-                    Chưa có tài khoản? <a href="javascript:void(0)" onclick="switchAuth('register')" style="color: #43a047; font-weight: bold; text-decoration: underline;">Đăng ký tại đây</a>
+                <p style="text-align: center; margin-top: 15px;">
+                    Chưa có tài khoản? <a href="#" onclick="switchAuth('register')">Đăng ký tại đây</a>
                 </p>
             </form>
         </div>
     </div>
 
+    <!-- MODAL ĐĂNG KÝ -->
     <div id="modal-register" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="toggleModal('modal-register')">&times;</span>
+        <div class="modal-content auth-box">
+            <span class="close" onclick="toggleModal('modal-register')">&times;</span>
             <h2>📝 Đăng Ký Thành Viên</h2>
             <form id="registerForm">
                 <div class="form-group">
-                    <label>Họ và tên của bé:</label>
-                    <input type="text" id="regFullName" required placeholder="Nhập họ tên...">
+                    <label>Họ và Tên:</label>
+                    <input type="text" id="regFullName" required placeholder="Nhập tên của bé">
                 </div>
                 <div class="form-group">
-                    <label>Tên đăng nhập (Username):</label>
-                    <input type="text" id="regUser" required placeholder="Tạo tên đăng nhập...">
+                    <label>Tên đăng nhập:</label>
+                    <input type="text" id="regUser" required>
                 </div>
                 <div class="form-group">
                     <label>Mật khẩu:</label>
-                    <div class="password-wrapper" style="position: relative; display: flex; align-items: center;">
-                        <input type="password" id="regPass" required placeholder="Tạo mật khẩu..." style="width: 100%; padding-right: 40px;">
-                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('regPass', this)" style="position: absolute; right: 15px; cursor: pointer; color: #777;"></i>
+                    <div class="password-wrapper">
+                        <input type="password" id="regPass" required>
+                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('regPass', this)"></i>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Nhập lại mật khẩu:</label>
-                    <div class="password-wrapper" style="position: relative; display: flex; align-items: center;">
-                        <input type="password" id="regPassConfirm" required placeholder="Xác nhận mật khẩu..." style="width: 100%; padding-right: 40px;">
-                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('regPassConfirm', this)" style="position: absolute; right: 15px; cursor: pointer; color: #777;"></i>
+                    <div class="password-wrapper">
+                        <input type="password" id="regPassConfirm" required>
+                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('regPassConfirm', this)"></i>
                     </div>
                 </div>
-                <button type="submit" class="btn-submit">Hoàn tất đăng ký</button>
-                <p style="text-align: center; margin-top: 15px; font-size: 14px;">
-                    Đã có tài khoản rồi? <a href="javascript:void(0)" onclick="switchAuth('login')" style="color: #43a047; font-weight: bold; text-decoration: underline;">Quay lại đăng nhập</a>
-                </p>
+                <button type="submit" class="btn-submit">Tạo tài khoản</button>
             </form>
         </div>
     </div>
 
-    <div id="modal-add" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="toggleModal('modal-add')">&times;</span>
-            <h2>➕ Thêm Món Ăn Vào Nhật Ký</h2>
-            <form id="addFoodForm">
-                <div class="form-group">
-                    <label>Tên món ăn đã dùng:</label>
-                    <input type="text" id="foodName" required placeholder="Ví dụ: Cơm tấm, chân gà, trà sữa...">
-                </div>
-                <div class="form-group">
-                    <label>Hàm lượng Calo ước tính (kcal):</label>
-                    <input type="number" id="foodCalo" required placeholder="Ví dụ: 350">
-                </div>
-                <button type="submit" class="btn-submit">Lưu vào nhật ký ăn uống</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="public/script.js"></script>
+    <!-- SCRIPT XỬ LÝ -->
+    <script src="script.js"></script>
 </body>
 </html>
