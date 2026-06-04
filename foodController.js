@@ -5,11 +5,46 @@ exports.getAllFoods = async (req, res) => {
     catch (err) { res.status(500).json({ error: err.message }); }
 };
 
-exports.addFood = async (req, res) => {
-    try {
+exports.addFood = async (req,res)=>{
+
+    const {
+        name,
+        portion,
+        calo
+    } = req.body;
+
+    if(!name){
+        return res.status(400).json({
+            error:"Tên món ăn bắt buộc"
+        });
+    }
+
+    if(portion <=0){
+        return res.status(400).json({
+            error:"Khẩu phần phải > 0"
+        });
+    }
+
+    if(calo <0){
+        return res.status(400).json({
+            error:"Calo không hợp lệ"
+        });
+    }
+
+    try{
         await FoodModel.create(req.body);
-        res.status(201).json({ message: "OK" });
-    } catch (err) { res.status(500).json({ error: err.message }); }
+
+        res.status(201).json({
+            message:"OK"
+        });
+
+    }catch(err){
+
+        res.status(500).json({
+            error:err.message
+        });
+
+    }
 };
 
 exports.updateFood = async (req, res) => {

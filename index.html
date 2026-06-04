@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2=family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
 
     <!-- THANH MENU -->
@@ -19,6 +20,9 @@
         <li><a href="javascript:void(0)" class="btn-login" id="nav-login-btn" onclick="toggleModal('modal-login')">Đăng nhập</a></li>
         <li><a href="javascript:void(0)" class="btn-register" id="nav-register-btn" onclick="toggleModal('modal-register')">Đăng ký</a></li>
         <li><a href="javascript:void(0)" class="btn-logout" id="nav-logout-btn" onclick="handleLogout()" style="display: none;">Đăng xuất</a></li>
+        <li><a href="#"onclick="showSection('bmi-calculator')">BMI</a></li>
+        <li><a href="#"onclick="showSection('dashboard')">Dashboard</a></li>
+
     </ul>
     </nav>
 
@@ -92,6 +96,36 @@
             </div>
         </section>
     </main>
+    <section id="dashboard" class="tab-content" style="display:none;">
+
+    <h2>📊 Thống kê Calo</h2>
+
+    <canvas
+    id="calorieChart">
+    </canvas>
+
+</section>
+    <section id="bmi-calculator" class="tab-content" style="display:none;">
+
+    <h2>⚖️ Tính chỉ số BMI</h2>
+
+    <div class="form-group">
+        <label>Chiều cao (m)</label>
+        <input type="number" id="height" step="0.01">
+    </div>
+
+    <div class="form-group">
+        <label>Cân nặng (kg)</label>
+        <input type="number" id="weight">
+    </div>
+
+    <button onclick="calculateBMI()">
+        Tính BMI
+    </button>
+
+    <h3 id="bmiResult"></h3>
+
+</section>
 
     <!-- NÚT BẤM NỔI (+) GÓC DƯỚI BÊN PHẢI -->
     <button class="fab-btn" onclick="toggleModal('modal-add')" title="Thêm món ăn mới">

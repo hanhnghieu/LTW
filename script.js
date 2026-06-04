@@ -1,5 +1,7 @@
 const APP_ID = '6e447c8e'; 
 const APP_KEY = 'ecff04668de1e5b3e2e610b54eb0b914s';
+localStorage.setItem('db_user', user);
+localStorage.setItem('db_pass', pass);
 
 // 1. ĐIỀU HƯỚNG TAB GIAO DIỆN
 function showSection(sectionId) {
@@ -339,6 +341,148 @@ window.onclick = (e) => {
     if (e.target === modalRegister) modalRegister.style.display = 'none';
     if (e.target === modalAdd) modalAdd.style.display = 'none';
 };
+// Tìm kiếm
+function searchFood(){
+
+    const keyword =
+    document.getElementById(
+        "searchInput"
+    ).value.toLowerCase();
+
+    const cards =
+    document.querySelectorAll(
+        ".food-card"
+    );
+
+    cards.forEach(card=>{
+
+        const name =
+        card.querySelector("h3")
+        .innerText
+        .toLowerCase();
+
+        if(name.includes(keyword)){
+            card.style.display="block";
+        }
+        else{
+            card.style.display="none";
+        }
+
+    });
+}
+function calculateBMI(){
+
+    const height =
+    parseFloat(
+        document.getElementById("height").value
+    );
+
+    const weight =
+    parseFloat(
+        document.getElementById("weight").value
+    );
+
+    if(!height || !weight){
+
+        alert("Nhập đầy đủ dữ liệu");
+
+        return;
+    }
+
+    const bmi =
+    weight / (height * height);
+
+    let status = "";
+
+    if(bmi < 18.5){
+
+        status = "Thiếu cân";
+
+    }
+    else if(bmi < 25){
+
+        status = "Bình thường";
+
+    }
+    else if(bmi < 30){
+
+        status = "Thừa cân";
+
+    }
+    else{
+
+        status = "Béo phì";
+
+    }
+
+    document.getElementById(
+        "bmiResult"
+    ).innerHTML =
+    `BMI = ${bmi.toFixed(2)}
+     (${status})`;
+}
+function drawChart(){
+
+    const ctx =
+    document.getElementById(
+        "calorieChart"
+    );
+
+    if(!ctx) return;
+
+    const days = [];
+    const calories = [];
+
+    for(let i=6;i>=0;i--){
+
+        const date =
+        new Date();
+
+        date.setDate(
+            date.getDate()-i
+        );
+
+        const key =
+        date.toLocaleDateString(
+            "en-CA"
+        );
+
+        const logs =
+        JSON.parse(
+            localStorage.getItem(
+                `logs_${key}`
+            )
+        ) || [];
+
+        let total = 0;
+
+        logs.forEach(item=>{
+            total += item.calo;
+        });
+
+        days.push(
+            date.toLocaleDateString(
+                "vi-VN"
+            )
+        );
+
+        calories.push(total);
+    }
+
+    new Chart(ctx,{
+        type:'bar',
+
+        data:{
+            labels:days,
+
+            datasets:[
+            {
+                label:'Calo',
+                data:calories
+            }]
+        }
+    });
+}
 
 // ĐỒNG BỘ TOÀN BỘ SỰ KIỆN KHI TRANG WEB TẢI XONG
 window.onload = function() {
@@ -347,8 +491,10 @@ window.onload = function() {
     if (dateInput) {
         dateInput.value = todayStr;
     }
+    
 
     updateGreeting();
     showDishes();
     renderDailyTable(todayStr);
+    drawChart();
 };
