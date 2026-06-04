@@ -126,65 +126,6 @@ if (loginForm) {
     };
 }
 
-// 4. HIỂN THỊ DANH SÁCH MÓN ĂN THAM KHẢO (API)
-async function showDishes() {
-    try {
-        const res = await fetch('/api/foods');
-        const data = await res.json();
-        const grid = document.getElementById('dishGrid');
-        if (!grid) return;
-
-        if (!data || data.length === 0) {
-            grid.innerHTML = "<p style='text-align:center; grid-column: 1/-1;'>Sổ tay đang trống. Thêm món ngay đi bé!</p>";
-            return;
-        }
-
-        grid.innerHTML = data.map(f => {
-            const id = f.MaMonAn || f.mamonan;
-            return `
-<div class="food-card">
-
-    <img
-    src="${f.HinhAnh || 'images/default-food.jpg'}"
-    alt="${f.TenMonAn}">
-
-    <div class="card-content">
-
-        <h3>${f.TenMonAn || 'Chưa có tên'}</h3>
-
-        <p>
-        🔥 ${f.Calo || 0} kcal
-        </p>
-
-        <p>
-        👨‍🍳 ${f.PhuongPhap || 'Chưa cập nhật'}
-        </p>
-
-        <p>
-        📝 ${f.MoTa || ''}
-        </p>
-
-        <div class="card-actions">
-
-            <button
-            class="btn-edit"
-            onclick="editFood(${id},
-            '${f.TenMonAn}',
-            ${f.KhauPhan})">Sửa</button>
-
-            <button
-            class="btn-delete"onclick="deleteFood(${id})">Xóa
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-`;
-        }).join('');
-    } catch (err) { console.error("Lỗi lấy dữ liệu:", err); }
-}
 
 // 5. QUẢN LÝ NHẬT KÝ DINH DƯỠNG (LOCALSTORAGE)
 const addFoodForm = document.getElementById('addFoodForm');
@@ -337,8 +278,8 @@ async function showDishes() {
         <div class="food-card">
 
             <img
-            src="${f.HinhAnh}"
-            alt="${f.TenMonAn}">
+            src="/${f.HinhAnh}"
+            alt="/${f.TenMonAn}">
 
             <div class="card-content">
 
