@@ -1,7 +1,9 @@
 const APP_ID = '6e447c8e'; 
 const APP_KEY = 'ecff04668de1e5b3e2e610b54eb0b914s';
 
+// ==========================================
 // 1. ĐIỀU HƯỚNG TAB GIAO DIỆN
+// ==========================================
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.tab-content');
     sections.forEach(section => {
@@ -32,12 +34,13 @@ function showSection(sectionId) {
     }
 }
 
-// 2. CẬP NHẬT LỜI CHÀO THEO THỜI GIAN THỰC
+// ==========================================
+// 2. CẬP NHẬT LỜI CHÀO VÀ ĐỒNG BỘ THANH MENU
+// ==========================================
 function updateGreeting() {
     const greetingElement = document.getElementById('greeting');
     const heroSection = document.getElementById('hero-bg');
     
-    // Lấy các nút trên menu để xử lý ẩn hiện
     const loginBtn = document.getElementById('nav-login-btn');
     const registerBtn = document.getElementById('nav-register-btn');
     const logoutBtn = document.getElementById('nav-logout-btn');
@@ -63,15 +66,11 @@ function updateGreeting() {
 
     if (isLoggedIn && savedName) {
         greetingElement.innerHTML = `${message}, <span style="color:#43a047">${savedName}</span>! 🌿`;
-        
-        // Đã đăng nhập: Ẩn Đăng nhập/Đăng ký, Hiện Đăng xuất
         if (loginBtn) loginBtn.style.display = 'none';
         if (registerBtn) registerBtn.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'block';
     } else {
         greetingElement.innerText = `${message}!`;
-        
-        // Chưa đăng nhập: Hiện Đăng nhập/Đăng ký, Ẩn Đăng xuất
         if (loginBtn) loginBtn.style.display = 'block';
         if (registerBtn) registerBtn.style.display = 'block';
         if (logoutBtn) logoutBtn.style.display = 'none';
@@ -80,7 +79,9 @@ function updateGreeting() {
     if (heroSection) heroSection.style.background = bgColor;
 }
 
-// 3. XỬ LÝ HỆ THỐNG THÀNH VIÊN (AUTH)
+// ==========================================
+// 3. XỬ LÝ HỆ THỐNG THÀNH VIÊN (AUTH) VÀ ĐĂNG XUẤT
+// ==========================================
 const registerForm = document.getElementById('registerForm');
 if (registerForm) {
     registerForm.onsubmit = function(e) {
@@ -126,7 +127,17 @@ if (loginForm) {
     };
 }
 
+function handleLogout() {
+    if (confirm("Bé muốn đăng xuất thật hả? 🥺")) {
+        localStorage.removeItem('isLoggedIn');
+        alert("👋 Đã đăng xuất thành công!");
+        window.location.reload();
+    }
+}
+
+// ==========================================
 // 4. HIỂN THỊ DANH SÁCH MÓN ĂN THAM KHẢO (API)
+// ==========================================
 async function showDishes() {
     try {
         const res = await fetch('/api/foods');
@@ -158,7 +169,9 @@ async function showDishes() {
     } catch (err) { console.error("Lỗi lấy dữ liệu:", err); }
 }
 
-// 5. QUẢN LÝ NHẬT KÝ DINH DƯỠNG (LOCALSTORAGE)
+// ==========================================
+// 5. QUẢN LÝ NHẬT KÝ DINH DƯỠNG VÀ PHÂN TÍCH HÔM QUA
+// ==========================================
 const addFoodForm = document.getElementById('addFoodForm');
 if (addFoodForm) {
     addFoodForm.onsubmit = function(e) {
@@ -192,6 +205,8 @@ if (addFoodForm) {
             toggleModal('modal-add');
             this.reset();
             
+            // Cập nhật lại mục phân tích nếu người dùng đang xem trang chủ
+            analyzeYesterdayNutrition();
         } catch (error) {
             console.error("Lỗi lưu trữ:", error);
         }
@@ -204,7 +219,6 @@ function renderDailyTable(date) {
     if (!tableBody) return;
 
     const data = JSON.parse(localStorage.getItem(`logs_${date}`)) || [];
-    
     let html = "";
     let totalCalo = 0;
 
@@ -234,6 +248,7 @@ function deleteLog(date, index) {
     data.splice(index, 1); 
     localStorage.setItem(`logs_${date}`, JSON.stringify(data));
     renderDailyTable(date); 
+    analyzeYesterdayNutrition();
 }
 
 function updateCalorieUI(totalCalo) {
@@ -261,7 +276,41 @@ function loadDailyMenu() {
     }
 }
 
+// HÀM TỰ ĐỘNG PHÂN TÍCH VÀ HIỂN THỊ THỰC ĐƠN NGÀY HÔM QUA
+function analyzeYesterdayNutrition() {
+    const suggestionText = document.getElementById('suggestion-text');
+    const suggestionGrid = document.getElementById('suggested-dishes');
+    if (!suggestionText || !suggestionGrid) return;
+
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const yesterdayKey = yesterday.toLocaleDateString('en-CA'); 
+
+    const yesterdayData = JSON.parse(localStorage.getItem(`logs_${yesterdayKey}`)) || [];
+
+    if (yesterdayData.length > 0) {
+        const totalCalo = yesterdayData.reduce((sum, item) => sum + item.calo, 0);
+        suggestionText.innerHTML = `Hôm qua (${yesterday.toLocaleDateString('vi-VN')}), bạn đã nạp tổng cộng <strong>${totalCalo} kcal</strong>. Dưới đây là thực đơn chi tiết chiết xuất từ hệ thống:`;
+
+        suggestionGrid.innerHTML = yesterdayData.map(item => `
+            <div class="food-card" style="background: rgba(255, 255, 255, 0.9); border: 1px dashed #43a047; padding: 12px; min-height: auto; border-radius: 8px;">
+                <div class="card-content">
+                    <span style="font-size: 0.75rem; background: #e8f5e9; padding: 2px 6px; border-radius: 4px; color: #43a047; font-weight: 600;">${item.time}</span>
+                    <h4 style="margin: 6px 0 4px 0; font-size: 0.95rem; color: #2e7d32;">${item.name}</h4>
+                    <p style="margin: 0; font-size: 0.9rem; color: #555;">🔥 <strong>${item.calo}</strong> kcal</p>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        suggestionText.innerText = "Hôm qua bạn không ghi chép dữ liệu dinh dưỡng nào trong hệ thống.";
+        suggestionGrid.innerHTML = "";
+    }
+}
+
+// ==========================================
 // 6. SỬA / XÓA MÓN THAM KHẢO TRÊN API
+// ==========================================
 async function editFood(id, oldName, oldPortion) {
     const newName = prompt("Nhập tên món mới:", oldName);
     const newPortion = prompt("Nhập khẩu phần mới:", oldPortion);
@@ -284,7 +333,9 @@ async function deleteFood(id) {
     }
 }
 
-// 7. QUẢN LÝ ĐÓNG MỞ MODAL VÀ CHUYỂN ĐỔI FORM (ĐÃ TỐI ƯU)
+// ==========================================
+// 7. QUẢN LÝ ĐÓNG MỞ MODAL VÀ HIỂN THỊ MẬT KHẨU
+// ==========================================
 function toggleModal(id) {
     const modal = document.getElementById(id);
     if (modal) modal.style.display = modal.style.display === "block" ? "none" : "block";
@@ -301,31 +352,17 @@ function switchAuth(type) {
         if (loginModal) loginModal.style.display = 'block';
     }
 }
-// Hàm xử lý khi bấm nút Đăng xuất
-function handleLogout() {
-    if (confirm("Bé muốn đăng xuất thật hả? 🥺")) {
-        // Xóa trạng thái đăng nhập trong máy
-        localStorage.removeItem('isLoggedIn');
-        
-        alert("👋 Đã đăng xuất thành công!");
-        
-        // Tải lại trang để giao diện reset về trạng thái ban đầu
-        window.location.reload();
-    }
-}
-// Hàm bật/tắt ẩn hiện mật khẩu và đổi icon con mắt
+
 function togglePasswordVisibility(inputId, iconElement) {
     const passwordInput = document.getElementById(inputId);
     if (!passwordInput) return;
 
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
-        // Đổi icon thành mắt gạch chéo (ẩn đi)
         iconElement.classList.remove("fa-eye");
         iconElement.classList.add("fa-eye-slash");
     } else {
         passwordInput.type = "password";
-        // Đổi icon thành mắt bình thường (hiện lên)
         iconElement.classList.remove("fa-eye-slash");
         iconElement.classList.add("fa-eye");
     }
@@ -340,7 +377,7 @@ window.onclick = (e) => {
     if (e.target === modalAdd) modalAdd.style.display = 'none';
 };
 
-// ĐỒNG BỘ TOÀN BỘ SỰ KIỆN KHI TRANG WEB TẢI XONG
+// INITIALIZATION
 window.onload = function() {
     const dateInput = document.getElementById('history-date');
     const todayStr = new Date().toLocaleDateString('en-CA');
@@ -351,4 +388,5 @@ window.onload = function() {
     updateGreeting();
     showDishes();
     renderDailyTable(todayStr);
+    analyzeYesterdayNutrition(); 
 };
