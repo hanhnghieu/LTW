@@ -273,6 +273,87 @@ body { background-color: var(--mint-light); color: var(--text-color); margin: 0;
     border-radius: 20px;
     transition: 0.3s;
 }
+/* ==========================================
+   BỔ SUNG CSS CHO CÁC TÍNH NĂNG MỚI
+   ========================================== */
+
+/* 1. Thiết kế vệt nhấn và bo góc cho thanh quản lý món ăn */
+.control-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #43a047; /* Vạch màu xanh lá bên trái tạo điểm nhấn */
+}
+
+.control-panel h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #333;
+}
+
+/* 2. Thiết kế nút Thêm Món Mới xịn sò */
+.btn-add-new {
+    background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-add-new:hover {
+    box-shadow: 0 4px 15px rgba(67, 160, 71, 0.4);
+    transform: translateY(-2px); /* Nhấc nhẹ nút lên khi di chuột */
+}
+
+.btn-add-new:active {
+    transform: translateY(0);
+}
+
+/* 3. Đổi màu icon con mắt khi rê chuột vào */
+.password-wrapper .toggle-password:hover {
+    color: #43a047 !important;
+}
+
+/* 4. Thiết kế nút Đăng Xuất màu đỏ cam trên thanh Menu */
+.nav-links .btn-logout {
+    background-color: #e53935;
+    color: white !important;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.nav-links .btn-logout:hover {
+    background-color: #c62828;
+    box-shadow: 0 2px 8px rgba(229, 57, 53, 0.4);
+}
+
+/* 5. Giao diện responsive mượt mà trên điện thoại */
+@media (max-width: 600px) {
+    .control-panel {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    .btn-add-new {
+        width: 100%;
+        justify-content: center;
+    }
+}
 
 .nav-links li a.btn-login:hover {
     background-color: #e0f2f1;
