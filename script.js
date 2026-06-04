@@ -485,6 +485,33 @@ function drawChart(){
         }
     });
 }
+function suggestFoods(){
+
+    const dishes = [
+
+        {
+            name:"Salad ức gà",
+            bmi:"high"
+        },
+
+        {
+            name:"Yến mạch",
+            bmi:"high"
+        },
+
+        {
+            name:"Phở bò",
+            bmi:"low"
+        },
+
+        {
+            name:"Cơm tấm",
+            bmi:"low"
+        }
+
+    ];
+
+}
 
 // ĐỒNG BỘ TOÀN BỘ SỰ KIỆN KHI TRANG WEB TẢI XONG
 window.onload = function() {
