@@ -14,11 +14,12 @@
     <nav class="navbar">
         <div class="logo">🌿 Dinh<span>Dưỡng</span></div>
         <ul class="nav-links">
-            <li><a href="#" class="active" onclick="showSection('home')">Trang Chủ</a></li>
-            <li><a href="#" onclick="showSection('food-manager')">Quản Lý Dinh Dưỡng</a></li>
-            <li><a href="javascript:void(0)" class="btn-login" onclick="toggleModal('modal-login')">Đăng nhập</a></li>
-            <li><a href="javascript:void(0)" class="btn-register" onclick="toggleModal('modal-register')">Đăng ký</a></li>
-        </ul>
+        <li><a href="#" class="active" onclick="showSection('home')">Trang Chủ</a></li>
+        <li><a href="#" onclick="showSection('food-manager')">Quản Lý Dinh Dưỡng</a></li>
+        <li><a href="javascript:void(0)" class="btn-login" id="nav-login-btn" onclick="toggleModal('modal-login')">Đăng nhập</a></li>
+        <li><a href="javascript:void(0)" class="btn-register" id="nav-register-btn" onclick="toggleModal('modal-register')">Đăng ký</a></li>
+        <li><a href="javascript:void(0)" class="btn-logout" id="nav-logout-btn" onclick="handleLogout()" style="display: none;">Đăng xuất</a></li>
+    </ul>
     </nav>
 
     <!-- NỘI DUNG CHÍNH -->

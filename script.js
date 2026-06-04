@@ -36,6 +36,12 @@ function showSection(sectionId) {
 function updateGreeting() {
     const greetingElement = document.getElementById('greeting');
     const heroSection = document.getElementById('hero-bg');
+    
+    // Lấy các nút trên menu để xử lý ẩn hiện
+    const loginBtn = document.getElementById('nav-login-btn');
+    const registerBtn = document.getElementById('nav-register-btn');
+    const logoutBtn = document.getElementById('nav-logout-btn');
+
     if (!greetingElement) return;
 
     const hour = new Date().getHours();
@@ -57,8 +63,18 @@ function updateGreeting() {
 
     if (isLoggedIn && savedName) {
         greetingElement.innerHTML = `${message}, <span style="color:#43a047">${savedName}</span>! 🌿`;
+        
+        // Đã đăng nhập: Ẩn Đăng nhập/Đăng ký, Hiện Đăng xuất
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (registerBtn) registerBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'block';
     } else {
         greetingElement.innerText = `${message}!`;
+        
+        // Chưa đăng nhập: Hiện Đăng nhập/Đăng ký, Ẩn Đăng xuất
+        if (loginBtn) loginBtn.style.display = 'block';
+        if (registerBtn) registerBtn.style.display = 'block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
     }
 
     if (heroSection) heroSection.style.background = bgColor;
@@ -283,6 +299,18 @@ function switchAuth(type) {
     } else if (type === 'login') {
         if (registerModal) registerModal.style.display = 'none';
         if (loginModal) loginModal.style.display = 'block';
+    }
+}
+// Hàm xử lý khi bấm nút Đăng xuất
+function handleLogout() {
+    if (confirm("Bé muốn đăng xuất thật hả? 🥺")) {
+        // Xóa trạng thái đăng nhập trong máy
+        localStorage.removeItem('isLoggedIn');
+        
+        alert("👋 Đã đăng xuất thành công!");
+        
+        // Tải lại trang để giao diện reset về trạng thái ban đầu
+        window.location.reload();
     }
 }
 // Hàm bật/tắt ẩn hiện mật khẩu và đổi icon con mắt
