@@ -85,6 +85,7 @@
                         <tr>
                             <th>Thời gian</th>
                             <th>Món ăn</th>
+                            <th> Phương pháp chế biến</th>
                             <th>Lượng Calo</th>
                             <th>Thao tác</th>
                         </tr>
@@ -107,25 +108,24 @@
 </section>
     <section id="bmi-calculator" class="tab-content" style="display:none;">
 
-    <h2>⚖️ Tính chỉ số BMI</h2>
+   <section id="bmi-calculator" class="tab-content" style="display:none;">
 
-    <div class="form-group">
-        <label>Chiều cao (m)</label>
-        <input type="number" id="height" step="0.01">
-    </div>
+<h2>⚖️ Tính chỉ số BMI</h2>
 
-    <div class="form-group">
-        <label>Cân nặng (kg)</label>
-        <input type="number" id="weight">
-    </div>
+<div class="form-group">
+    <label>Chiều cao (m)</label>
+    <input type="number" id="height" step="0.01">
+</div>
 
-    <button onclick="calculateBMI()">
-        Tính BMI
-    </button>
+<div class="form-group">
+    <label>Cân nặng (kg)</label>
+    <input type="number" id="weight">
+</div>
 
-    <h3 id="bmiResult"></h3>
+<button onclick="calculateBMI()">
+    Tính BMI
+</button>
 
-</section>
 <div class="bmi-card">
 
     <h3>⚖️ Kết quả BMI</h3>
@@ -137,6 +137,10 @@
     <div id="bmi-status">
         Chưa tính
     </div>
+
+</div>
+
+</section>
 
 </div>
     <!-- NÚT BẤM NỔI (+) GÓC DƯỚI BÊN PHẢI -->
@@ -163,6 +167,28 @@
                         <label>Lượng Calo (kcal):</label>
                         <input type="number" id="foodCalo" value="0">
                     </div>
+                    <div class="form-group">
+                    <label>Phương pháp chế biến</label>
+
+                    <select id="foodMethod">
+
+                        <option>Luộc</option>
+
+                        <option>Hấp</option>
+
+                        <option>Nướng</option>
+
+                        <option>Chiên</option>
+
+                        <option>Xào</option>
+
+                        <option>Áp chảo</option>
+
+                        <option>Kho</option>
+
+                    </select>
+
+                </div>
                 </div>
                 <div class="form-group">
                     <label>Mô tả món ăn:</label>

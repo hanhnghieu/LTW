@@ -172,15 +172,21 @@ if (addFoodForm) {
         const dateKey = now.toLocaleDateString('en-CA'); 
 
         if (foodName === "") {
-            alert("Bé ơi, nhập tên món ăn đã nhé! ✨");
+            alert("Bạn ơi, nhập tên món ăn đã nhé! ✨");
             return;
         }
 
-        const newEntry = { 
-            id: Date.now(), 
-            time: time, 
-            name: foodName, 
-            calo: calo 
+        const method =
+        document.getElementById(
+        "foodMethod"
+        ).value;
+
+        const newEntry = {
+        id: Date.now(),
+        time: time,
+        name: foodName,
+        calo: calo,
+        method: method
         };
 
         try {
@@ -210,18 +216,21 @@ function renderDailyTable(date) {
 
     data.forEach((item, index) => {
         totalCalo += item.calo;
-        html += `
-            <tr>
-                <td>${item.time}</td>
-                <td><strong>${item.name}</strong></td>
-                <td class="item-calo">${item.calo}</td>
-                <td>
-                    <button class="btn-delete" style="background:none; border:none; color:#e53935; cursor:pointer;" onclick="deleteLog('${date}', ${index})">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
+   html += `
+<tr>
+    <td>${item.time}</td>
+    <td><strong>${item.name}</strong></td>
+    <td>${item.method || "-"}</td>
+    <td class="item-calo">${item.calo}</td>
+    <td>
+        <button class="btn-delete"
+        style="background:none; border:none; color:#e53935; cursor:pointer;"
+        onclick="deleteLog('${date}', ${index})">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </td>
+</tr>
+`;
     });
 
     tableBody.innerHTML = html;
@@ -485,33 +494,61 @@ function drawChart(){
         }
     });
 }
-function suggestFoods(){
+    
+function loadSuggestedFoods(){
 
-    const dishes = [
+const container =
+document.getElementById(
+    "suggested-dishes"
+);
 
-        {
-            name:"Salad ức gà",
-            bmi:"high"
-        },
+if(!container) return;
 
-        {
-            name:"Yến mạch",
-            bmi:"high"
-        },
+const foods = [
 
-        {
-            name:"Phở bò",
-            bmi:"low"
-        },
+    {
+        name:"🥗 Salad Ức Gà",
+        calo:250
+    },
 
-        {
-            name:"Cơm tấm",
-            bmi:"low"
-        }
+    {
+        name:"🍚 Cơm Gà Luộc",
+        calo:450
+    },
 
-    ];
+    {
+        name:"🐟 Cá Hồi Áp Chảo",
+        calo:350
+    },
+
+    {
+        name:"🥣 Yến Mạch Sữa Chua",
+        calo:200
+    }
+
+];
+
+container.innerHTML =
+foods.map(food => `
+
+    <div class="food-card">
+
+        <div class="card-content">
+
+            <h3>${food.name}</h3>
+
+            <p>
+            🔥 ${food.calo} kcal
+            </p>
+
+        </div>
+
+    </div>
+
+`).join("");
 
 }
+
 
 // ĐỒNG BỘ TOÀN BỘ SỰ KIỆN KHI TRANG WEB TẢI XONG
 window.onload = function() {
@@ -526,4 +563,5 @@ window.onload = function() {
     showDishes();
     renderDailyTable(todayStr);
     drawChart();
+    loadSuggestedFoods();
 };
