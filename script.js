@@ -1,7 +1,5 @@
 const APP_ID = '6e447c8e'; 
 const APP_KEY = 'ecff04668de1e5b3e2e610b54eb0b914s';
-localStorage.setItem('db_user', user);
-localStorage.setItem('db_pass', pass);
 
 // 1. ĐIỀU HƯỚNG TAB GIAO DIỆN
 function showSection(sectionId) {
