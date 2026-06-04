@@ -8,15 +8,6 @@ class FoodModel {
         return result.recordset;
     }
 
- static async create(data) {
-        let pool = await sql.connect(config);
-        return await pool.request()
-            .input('name', sql.NVarChar, data.name)
-            .input('portion', sql.Int, parseInt(data.portion)) // Ép kiểu số ở đây cho chắc
-            .input('desc', sql.NVarChar, data.desc)
-            .query('INSERT INTO MonAn (TenMonAn, KhauPhan, MoTa) VALUES (N\'\' + @name, @portion, N\'\' + @desc)');
-    }
-
     static async update(id, data) {
         let pool = await sql.connect(config);
         return await pool.request()
@@ -36,9 +27,9 @@ class FoodModel {
     let pool = await sql.connect(config);
     return await pool.request()
         .input('name', sql.NVarChar, data.name)
-        .input('portion', sql.Int, data.portion)
+       .input('portion', sql.Int, parseInt(data.portion)) 
         .input('desc', sql.NVarChar, data.desc)
-        .input('calo', sql.Int, data.calo) // Thêm dòng này
+        .input('calo', sql.Int, data.calo) 
         .query('INSERT INTO MonAn (TenMonAn, KhauPhan, MoTa, Calo) VALUES (N\'\' + @name, @portion, N\'\' + @desc, @calo)');
 }
 }
