@@ -1,13 +1,16 @@
+require("dotenv").config();
+
 const config = {
-    user: 'sa',
-    password: '123456',
-    server: '127.0.0.1',
-    port: 1433,
-    database: 'SoTayDinhDuong1',
-    options: {
-        encrypt: true,
-        trustServerCertificate: true
-    }
+user: process.env.DB_USER,
+password: process.env.DB_PASSWORD,
+server: process.env.DB_SERVER,
+port: parseInt(process.env.DB_PORT) || 1433,
+database: process.env.DB_NAME,
+options: {
+    encrypt: true,
+    trustServerCertificate: true
+}
+
 };
 
 module.exports = config;
