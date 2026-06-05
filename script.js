@@ -41,12 +41,13 @@ function updateGreeting() {
     const greetingElement = document.getElementById('greeting');
     const heroSection = document.getElementById('hero-bg');
     
+    // Lấy các nút trên menu để xử lý ẩn hiện
     const loginBtn = document.getElementById('nav-login-btn');
     const registerBtn = document.getElementById('nav-register-btn');
     const logoutBtn = document.getElementById('nav-logout-btn');
-    
-    // Khối gợi ý thực đơn thông minh
-    const smartSuggestion = document.getElementById('smart-suggestion');
+
+    // Tìm khối gợi ý thực đơn thông minh ngoài giao diện
+    const smartSuggestion = document.querySelector('.suggestion-box') || document.getElementById('smart-suggestion');
 
     if (!greetingElement) return;
 
@@ -75,9 +76,11 @@ function updateGreeting() {
         if (registerBtn) registerBtn.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'block';
 
-        // ĐỒNG BỘ: Hiện khối gợi ý thực đơn & chạy phân tích dữ liệu hôm qua
-        if (smartSuggestion) smartSuggestion.style.display = 'block';
-        loadSuggestedFoods();
+        // ĐÃ ĐĂNG NHẬP: Mở khối gợi ý món ăn lên và chạy phân tích dữ liệu
+        if (smartSuggestion) {
+            smartSuggestion.style.display = 'block';
+        }
+        loadSuggestedFoods(); // Gọi hàm phân tích dữ liệu ăn uống hôm qua
     } else {
         greetingElement.innerText = `${message}!`;
         
@@ -86,13 +89,14 @@ function updateGreeting() {
         if (registerBtn) registerBtn.style.display = 'block';
         if (logoutBtn) logoutBtn.style.display = 'none';
 
-        // ĐỒNG BỘ: Ẩn hoàn toàn khối gợi ý thực đơn khi chưa đăng nhập
-        if (smartSuggestion) smartSuggestion.style.display = 'none';
+        // CHƯA ĐĂNG NHẬP: Ẩn hoàn toàn khối gợi ý thực đơn đi
+        if (smartSuggestion) {
+            smartSuggestion.style.display = 'none';
+        }
     }
 
     if (heroSection) heroSection.style.background = bgColor;
 }
-
 // ==========================================================================
 // 3. XỬ LÝ HỆ THỐNG THÀNH VIÊN (AUTH)
 // ==========================================================================
