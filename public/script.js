@@ -122,6 +122,7 @@ if (loginForm) {
             localStorage.setItem('isLoggedIn', 'true');
             toggleModal('modal-login');
             updateGreeting(); 
+            loadSuggestedFoods();
         } else {
             alert("❌ Sai tài khoản hoặc mật khẩu rồi!");
         }
@@ -321,7 +322,36 @@ function showDishes() {
             PhuongPhap: "Nướng", 
             MoTa: "Nguồn tinh bột hấp thu chậm, giàu chất xơ, hỗ trợ kiểm soát đường huyết",
             HinhAnh: "https://file.hstatic.net/200000610729/article/khoai-lang-nuong_2ca1f44f98d54367a43cd3d02ba6015e_1024x1024.jpg" 
+        },
+        { 
+           TenMonAn: "Nấm đùi gà xào húng quế", 
+            Calo: 95, 
+            PhuongPhap: "Xào", 
+            MoTa: "Món chay thanh đạm, giàu chất xơ và các hợp chất kháng viêm tự nhiên",
+            HinhAnh: "https://img-global.cpcdn.com/recipes/1b3fea9aad393733/1200x630cq80/photo.jpg" 
+        },
+        { 
+            TenMonAn: "Cá chẽm hấp Hong Kong", 
+            Calo: 190, 
+            PhuongPhap: "Hấp", 
+            MoTa: "Thịt cá trắng giàu đạm, dễ tiêu hóa, phù hợp cho cả gia đình phục hồi sức khỏe",
+            HinhAnh: "https://cdn.tgdd.vn/Files/2021/11/02/1395156/huong-dan-lam-ca-chem-hap-hong-kong-ngon-nhu-nha-hang-202111020105243466.jpg" 
+        },
+         { 
+           TenMonAn: "Filet heo nướng mật ong", 
+            Calo: 240, 
+            PhuongPhap: "Nướng", 
+            MoTa: "Phần thịt heo ít mỡ, kết hợp mật ong tạo vị ngọt tự nhiên, giàu năng lượng",
+            HinhAnh: "https://cdn.tgdd.vn/Files/2017/03/23/964110/cach-lam-thit-nuong-mat-ong-thom-ngon-4_760x450.jpg" 
+        },
+         { 
+           TenMonAn: "Bí ngòi xào tôm tươi", 
+            Calo: 140, 
+            PhuongPhap: "Xào", 
+            MoTa: "Món ăn thanh nhẹ, giàu kẽm từ tôm và các chất chống oxy hóa từ bí ngòi",
+            HinhAnh: "https://i.ytimg.com/vi/WcxHUIeuJ6k/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCCc7DMS2122Q04w9WVZDfEtkR7Sg" 
         }
+        
     ];
 
     const grid = document.getElementById('dishGrid');
