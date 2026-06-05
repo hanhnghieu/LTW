@@ -1,9 +1,7 @@
 const APP_ID = '6e447c8e'; 
 const APP_KEY = 'ecff04668de1e5b3e2e610b54eb0b914s';
 
-// ==========================================================================
 // 1. ĐIỀU HƯỚNG TAB GIAO DIỆN
-// ==========================================================================
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.tab-content');
     sections.forEach(section => {
@@ -34,9 +32,7 @@ function showSection(sectionId) {
     }
 }
 
-// ==========================================================================
-// 2. CẬP NHẬT GIAO DIỆN & TRẠNG THÁI ĐĂNG NHẬP THEO TÀI KHOẢN
-// ==========================================================================
+// 2. CẬP NHẬT LỜI CHÀO THEO THỜI GIAN THỰC
 function updateGreeting() {
     const greetingElement = document.getElementById('greeting');
     const heroSection = document.getElementById('hero-bg');
@@ -45,9 +41,6 @@ function updateGreeting() {
     const loginBtn = document.getElementById('nav-login-btn');
     const registerBtn = document.getElementById('nav-register-btn');
     const logoutBtn = document.getElementById('nav-logout-btn');
-
-    // Tìm khối gợi ý thực đơn thông minh ngoài giao diện
-    const smartSuggestion = document.querySelector('.suggestion-box') || document.getElementById('smart-suggestion');
 
     if (!greetingElement) return;
 
@@ -75,12 +68,6 @@ function updateGreeting() {
         if (loginBtn) loginBtn.style.display = 'none';
         if (registerBtn) registerBtn.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'block';
-
-        // ĐÃ ĐĂNG NHẬP: Mở khối gợi ý món ăn lên và chạy phân tích dữ liệu
-        if (smartSuggestion) {
-            smartSuggestion.style.display = 'block';
-        }
-        loadSuggestedFoods(); // Gọi hàm phân tích dữ liệu ăn uống hôm qua
     } else {
         greetingElement.innerText = `${message}!`;
         
@@ -88,18 +75,12 @@ function updateGreeting() {
         if (loginBtn) loginBtn.style.display = 'block';
         if (registerBtn) registerBtn.style.display = 'block';
         if (logoutBtn) logoutBtn.style.display = 'none';
-
-        // CHƯA ĐĂNG NHẬP: Ẩn hoàn toàn khối gợi ý thực đơn đi
-        if (smartSuggestion) {
-            smartSuggestion.style.display = 'none';
-        }
     }
 
     if (heroSection) heroSection.style.background = bgColor;
 }
-// ==========================================================================
+
 // 3. XỬ LÝ HỆ THỐNG THÀNH VIÊN (AUTH)
-// ==========================================================================
 const registerForm = document.getElementById('registerForm');
 if (registerForm) {
     registerForm.onsubmit = function(e) {
@@ -138,116 +119,15 @@ if (loginForm) {
             alert("🔓 Đăng nhập thành công!");
             localStorage.setItem('isLoggedIn', 'true');
             toggleModal('modal-login');
-            
-            // Cập nhật lại toàn bộ giao diện sau khi đăng nhập thành công
             updateGreeting(); 
-            loadUserBMI(); 
         } else {
             alert("❌ Sai tài khoản hoặc mật khẩu rồi bé ơi!");
         }
     };
 }
 
-function handleLogout() {
-    if (confirm("Bạn muốn đăng xuất thật hả? 🥺")) {
-        localStorage.removeItem('isLoggedIn');
-        alert("👋 Đã đăng xuất thành công!");
-        window.location.reload(); // Tải lại trang để reset toàn bộ giao diện và BMI về trống
-    }
-}
 
-// ==========================================================================
-// 4. QUẢN LÝ CHỈ SỐ BMI (LƯU THEO TÀI KHOẢN ĐỘNG)
-// ==========================================================================
-function calculateBMI(){
-    const height = parseFloat(document.getElementById("height").value);
-    const weight = parseFloat(document.getElementById("weight").value);
-
-    if(!height || !weight){
-        alert("Nhập đầy đủ dữ liệu chiều cao và cân nặng để tính nhé!");
-        return;
-    }
-
-    const bmi = weight / (height * height);
-    let status = "";
-    let bgColor = "";
-
-    if(bmi < 18.5){
-        status = "Thiếu cân";
-        bgColor = "#ffe082";
-    } else if(bmi < 25){
-        status = "Bình thường";
-        bgColor = "#a5d6a7";
-    } else if(bmi < 30){
-        status = "Thừa cân";
-        bgColor = "#ffcc80";
-    } else {
-        status = "Béo phì";
-        bgColor = "#ef9a9a";
-    }
-
-    // Hiển thị kết quả lên giao diện
-    const statusElement = document.getElementById("bmi-status");
-    if(statusElement) statusElement.style.background = bgColor;
-    
-    document.getElementById("bmi-number").innerHTML = bmi.toFixed(2);
-    document.getElementById("bmi-status").innerHTML = status;
-
-    // TIẾN HÀNH LƯU TRỮ TRỰC TIẾP VÀO TÀI KHOẢN ĐANG ĐĂNG NHẬP
-    const currentUsername = localStorage.getItem('db_user');
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-
-    if (isLoggedIn && currentUsername) {
-        const bmiData = {
-            height: height,
-            weight: weight,
-            score: bmi.toFixed(2),
-            status: status,
-            bg: bgColor
-        };
-        localStorage.setItem(`bmi_data_${currentUsername}`, JSON.stringify(bmiData));
-        alert("💾 Đã lưu số đo chỉ số BMI của riêng tài khoản bạn!");
-    } else {
-        alert("💡 Mẹo: Bạn nên đăng nhập để hệ thống tự lưu chỉ số BMI này vĩnh viễn nhé!");
-    }
-}
-
-function loadUserBMI() {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const currentUsername = localStorage.getItem('db_user');
-    
-    const heightInput = document.getElementById("height");
-    const weightInput = document.getElementById("weight");
-    const numberElement = document.getElementById("bmi-number");
-    const statusElement = document.getElementById("bmi-status");
-
-    if (!numberElement || !statusElement) return;
-
-    // Nếu đã đăng nhập và tìm thấy dữ liệu BMI cũ của tài khoản này
-    if (isLoggedIn && currentUsername) {
-        const savedBMIData = JSON.parse(localStorage.getItem(`bmi_data_${currentUsername}`));
-        
-        if (savedBMIData) {
-            if (heightInput) heightInput.value = savedBMIData.height;
-            if (weightInput) weightInput.value = savedBMIData.weight;
-            numberElement.innerHTML = savedBMIData.score;
-            statusElement.innerHTML = savedBMIData.status;
-            statusElement.style.background = savedBMIData.bg;
-            return;
-        }
-    }
-
-    // Trạng thái mặc định khi chưa có dữ liệu hoặc đã đăng xuất
-    if (heightInput) heightInput.value = "";
-    if (weightInput) weightInput.value = "";
-    numberElement.innerHTML = "--";
-    statusElement.innerHTML = "Chưa có dữ liệu";
-    statusElement.style.background = "#f1f8e9";
-}
-
-// ==========================================================================
 // 5. QUẢN LÝ NHẬT KÝ DINH DƯỠNG (LOCALSTORAGE)
-// ==========================================================================
 const addFoodForm = document.getElementById('addFoodForm');
 if (addFoodForm) {
     addFoodForm.onsubmit = function(e) {
@@ -265,14 +145,17 @@ if (addFoodForm) {
             return;
         }
 
-        const method = document.getElementById("foodMethod").value;
+        const method =
+        document.getElementById(
+        "foodMethod"
+        ).value;
 
         const newEntry = {
-            id: Date.now(),
-            time: time,
-            name: foodName,
-            calo: calo,
-            method: method
+        id: Date.now(),
+        time: time,
+        name: foodName,
+        calo: calo,
+        method: method
         };
 
         try {
@@ -283,11 +166,6 @@ if (addFoodForm) {
             renderDailyTable(dateKey);
             toggleModal('modal-add');
             this.reset();
-            
-            // Đăng nhập rồi ăn uống thì tính toán lại gợi ý ngay lập tức
-            if(localStorage.getItem('isLoggedIn') === 'true') {
-                loadSuggestedFoods();
-            }
             
         } catch (error) {
             console.error("Lỗi lưu trữ:", error);
@@ -307,21 +185,21 @@ function renderDailyTable(date) {
 
     data.forEach((item, index) => {
         totalCalo += item.calo;
-        html += `
-        <tr>
-            <td>${item.time}</td>
-            <td><strong>${item.name}</strong></td>
-            <td>${item.method || "-"}</td>
-            <td class="item-calo">${item.calo}</td>
-            <td>
-                <button class="btn-delete"
-                style="background:none; border:none; color:#e53935; cursor:pointer;"
-                onclick="deleteLog('${date}', ${index})">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </td>
-        </tr>
-        `;
+   html += `
+<tr>
+    <td>${item.time}</td>
+    <td><strong>${item.name}</strong></td>
+    <td>${item.method || "-"}</td>
+    <td class="item-calo">${item.calo}</td>
+    <td>
+        <button class="btn-delete"
+        style="background:none; border:none; color:#e53935; cursor:pointer;"
+        onclick="deleteLog('${date}', ${index})">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </td>
+</tr>
+`;
     });
 
     tableBody.innerHTML = html;
@@ -334,10 +212,6 @@ function deleteLog(date, index) {
     data.splice(index, 1); 
     localStorage.setItem(`logs_${date}`, JSON.stringify(data));
     renderDailyTable(date); 
-    
-    if(localStorage.getItem('isLoggedIn') === 'true') {
-        loadSuggestedFoods();
-    }
 }
 
 function updateCalorieUI(totalCalo) {
@@ -365,104 +239,65 @@ function loadDailyMenu() {
     }
 }
 
-// ==========================================================================
-// 6. PHÂN TÍCH DINH DƯỠNG HÔM QUA ĐỂ ĐƯA RA GỢI Ý THỰC ĐƠN HÔM NAY
-// ==========================================================================
-function loadSuggestedFoods() {
-    const container = document.getElementById("suggested-dishes");
-    const textTarget = document.querySelector(".suggestion-box p") || document.getElementById("analysis-text");
-    
-    if (!container) return;
-
-    // 1. Tính toán ngày hôm qua (YYYY-MM-DD)
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    const yesterdayKey = yesterday.toLocaleDateString('en-CA');
-
-    // 2. Lấy dữ liệu ăn uống ngày hôm qua từ LocalStorage
-    const yesterdayLogs = JSON.parse(localStorage.getItem(`logs_${yesterdayKey}`)) || [];
-    let yesterdayTotalCalo = 0;
-    
-    yesterdayLogs.forEach(item => {
-        yesterdayTotalCalo += (parseInt(item.calo) || 0);
-    });
-
-    // 3. Phân tích thuật toán điều kiện năng lượng
-    let foods = [];
-    let analysisMessage = "";
-
-    if (yesterdayTotalCalo === 0) {
-        analysisMessage = "Do ngày hôm qua bạn chưa ghi nhật ký món ăn, Minty Diet gợi ý thực đơn cân bằng tiêu chuẩn cho ngày mới nhé! ✨";
-        foods = [
-            { name: "🥗 Salad Ức Gà Mè Rang", calo: 250 },
-            { name: "🍚 Cơm Gà Luộc Tiêu Chanh", calo: 450 },
-            { name: "🐟 Cá Hồi Áp Chảo Măng Tây", calo: 350 },
-            { name: "🥣 Yến Mạch Sữa Chua Trái Cây", calo: 200 }
-        ];
-    } else if (yesterdayTotalCalo > 2500) {
-        analysisMessage = `Hôm qua bạn đã nạp lượng calo khá cao (${yesterdayTotalCalo} kcal). Hôm nay chúng ta nên chọn thực đơn thanh đạm, ít calo để cơ thể nhẹ nhàng hơn nhé! 🌿`;
-        foods = [
-            { name: "🥗 Salad Thập Cẩm Chanh Dây", calo: 180 },
-            { name: "🥣 Yến Mạch Sữa Tươi Không Đường", calo: 190 },
-            { name: "🥦 Canh Bông Cải Xanh Thịt Bằm", calo: 150 },
-            { name: "🍎 Một quả Táo Tây & Trà Xanh", calo: 80 }
-        ];
-    } else {
-        analysisMessage = `Tuyệt vời! Hôm qua bạn duy trì năng lượng rất tốt (${yesterdayTotalCalo} kcal). Hôm nay hãy tiếp tục bổ sung các món ăn giàu dinh dưỡng sau: 💪`;
-        foods = [
-            { name: "🥩 Bò Né Bông Thiên Lý", calo: 520 },
-            { name: "🐟 Cá Hồi Áp Chảo Sốt Bơ Chanh", calo: 380 },
-            { name: "🍚 Cơm Gạo Lứt Lườn Gà Áp Chảo", calo: 420 },
-            { name: "🥚 2 Quả Trứng Gà Luộc & Chuối", calo: 190 }
-        ];
-    }
-
-    // 4. Cập nhật câu chữ hiển thị kết quả phân tích
-    if (textTarget) {
-        textTarget.innerText = analysisMessage;
-    }
-
-    // 5. Kết xuất (Render) danh sách thẻ món ăn đề xuất ra màn hình
-    container.innerHTML = foods.map(food => `
-        <div class="food-card">
-            <div class="card-content">
-                <h3>${food.name}</h3>
-                <p>🔥 ${food.calo} kcal</p>
-            </div>
-        </div>
-    `).join("");
-}
-
-// ==========================================================================
-// 7. DANH SÁCH MÓN ĂN THAM KHẢO
-// ==========================================================================
+// 6. SỬA / XÓA MÓN THAM KHẢO TRÊN API
 async function showDishes() {
+
     const data = [
-        { TenMonAn:"Phở bò", Calo:500, PhuongPhap:"Luộc", MoTa:"Phở bò truyền thống", HinhAnh:"images/pho.jpg" },
-        { TenMonAn:"Cơm tấm", Calo:650, PhuongPhap:"Nướng", MoTa:"Cơm tấm sườn", HinhAnh:"images/comtam.jpg" },
-        { TenMonAn:"Salad ức gà", Calo:250, PhuongPhap:"Luộc", MoTa:"Thực đơn giảm cân", HinhAnh:"images/salad.jpg" }
+
+    {
+        TenMonAn:"Phở bò",
+        Calo:500,
+        PhuongPhap:"Luộc",
+        MoTa:"Phở bò truyền thống",
+        HinhAnh:"images/pho.jpg"
+    },
+
+    {
+        TenMonAn:"Cơm tấm",
+        Calo:650,
+        PhuongPhap:"Nướng",
+        MoTa:"Cơm tấm sườn",
+        HinhAnh:"images/comtam.jpg"
+    },
+
+    {
+        TenMonAn:"Salad ức gà",
+        Calo:250,
+        PhuongPhap:"Luộc",
+        MoTa:"Thực đơn giảm cân",
+        HinhAnh:"images/salad.jpg"
+    }
+
     ];
 
     const grid = document.getElementById('dishGrid');
+
     if (!grid) return;
 
     grid.innerHTML = data.map(f => `
         <div class="food-card">
-            <img src="/${f.HinhAnh}" alt="/${f.TenMonAn}">
+
+            <img
+            src="/${f.HinhAnh}"
+            alt="/${f.TenMonAn}">
+
             <div class="card-content">
+
                 <h3>${f.TenMonAn}</h3>
+
                 <p>🔥 ${f.Calo} kcal</p>
+
                 <p>👨‍🍳 ${f.PhuongPhap}</p>
+
                 <p>${f.MoTa}</p>
+
             </div>
+
         </div>
     `).join('');
 }
 
-// ==========================================================================
-// 8. ĐÓNG MỞ MODAL VÀ TÌM KIẾM
-// ==========================================================================
+// 7. QUẢN LÝ ĐÓNG MỞ MODAL VÀ CHUYỂN ĐỔI FORM (ĐÃ TỐI ƯU)
 function toggleModal(id) {
     const modal = document.getElementById(id);
     if (modal) modal.style.display = modal.style.display === "block" ? "none" : "block";
@@ -479,17 +314,31 @@ function switchAuth(type) {
         if (loginModal) loginModal.style.display = 'block';
     }
 }
-
+// Hàm xử lý khi bấm nút Đăng xuất
+function handleLogout() {
+    if (confirm("Bạn muốn đăng xuất thật hả? 🥺")) {
+        // Xóa trạng thái đăng nhập trong máy
+        localStorage.removeItem('isLoggedIn');
+        
+        alert("👋 Đã đăng xuất thành công!");
+        
+        // Tải lại trang để giao diện reset về trạng thái ban đầu
+        window.location.reload();
+    }
+}
+// Hàm bật/tắt ẩn hiện mật khẩu và đổi icon con mắt
 function togglePasswordVisibility(inputId, iconElement) {
     const passwordInput = document.getElementById(inputId);
     if (!passwordInput) return;
 
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
+        // Đổi icon thành mắt gạch chéo (ẩn đi)
         iconElement.classList.remove("fa-eye");
         iconElement.classList.add("fa-eye-slash");
     } else {
         passwordInput.type = "password";
+        // Đổi icon thành mắt bình thường (hiện lên)
         iconElement.classList.remove("fa-eye-slash");
         iconElement.classList.add("fa-eye");
     }
@@ -503,24 +352,238 @@ window.onclick = (e) => {
     if (e.target === modalRegister) modalRegister.style.display = 'none';
     if (e.target === modalAdd) modalAdd.style.display = 'none';
 };
-
+// Tìm kiếm
 function searchFood(){
-    const keyword = document.getElementById("searchInput").value.toLowerCase();
-    const cards = document.querySelectorAll(".food-card");
+
+    const keyword =
+    document.getElementById(
+        "searchInput"
+    ).value.toLowerCase();
+
+    const cards =
+    document.querySelectorAll(
+        ".food-card"
+    );
 
     cards.forEach(card=>{
-        const name = card.querySelector("h3").innerText.toLowerCase();
+
+        const name =
+        card.querySelector("h3")
+        .innerText
+        .toLowerCase();
+
         if(name.includes(keyword)){
             card.style.display="block";
-        } else {
+        }
+        else{
             card.style.display="none";
+        }
+
+    });
+}
+function calculateBMI(){
+
+    const height =
+    parseFloat(
+        document.getElementById("height").value
+    );
+
+    const weight =
+    parseFloat(
+        document.getElementById("weight").value
+    );
+
+    if(!height || !weight){
+
+        alert("Nhập đầy đủ dữ liệu");
+
+        return;
+    }
+
+    const bmi =
+    weight / (height * height);
+
+    let status = "";
+
+    if(bmi < 18.5){
+
+        status = "Thiếu cân";
+
+    }
+    else if(bmi < 25){
+
+        status = "Bình thường";
+
+    }
+    else if(bmi < 30){
+
+        status = "Thừa cân";
+
+    }
+    else{
+
+        status = "Béo phì";
+
+    }
+    const statusElement =
+document.getElementById(
+"bmi-status"
+);
+
+if(bmi < 18.5){
+
+    statusElement.style.background =
+    "#ffe082";
+
+}
+else if(bmi < 25){
+
+    statusElement.style.background =
+    "#a5d6a7";
+
+}
+else if(bmi < 30){
+
+    statusElement.style.background =
+    "#ffcc80";
+
+}
+else{
+
+    statusElement.style.background =
+    "#ef9a9a";
+
+}
+
+    document.getElementById(
+    "bmi-number"
+    ).innerHTML =
+    bmi.toFixed(2);
+
+    document.getElementById(
+    "bmi-status"
+    ).innerHTML =
+    status;
+}
+function drawChart(){
+
+    const ctx =
+    document.getElementById(
+        "calorieChart"
+    );
+
+    if(!ctx) return;
+
+    const days = [];
+    const calories = [];
+
+    for(let i=6;i>=0;i--){
+
+        const date =
+        new Date();
+
+        date.setDate(
+            date.getDate()-i
+        );
+
+        const key =
+        date.toLocaleDateString(
+            "en-CA"
+        );
+
+        const logs =
+        JSON.parse(
+            localStorage.getItem(
+                `logs_${key}`
+            )
+        ) || [];
+
+        let total = 0;
+
+        logs.forEach(item=>{
+            total += item.calo;
+        });
+
+        days.push(
+            date.toLocaleDateString(
+                "vi-VN"
+            )
+        );
+
+        calories.push(total);
+    }
+
+    new Chart(ctx,{
+        type:'bar',
+
+        data:{
+            labels:days,
+
+            datasets:[
+            {
+                label:'Calo',
+                data:calories
+            }]
         }
     });
 }
+    
+function loadSuggestedFoods(){
 
-// ==========================================================================
-// 9. KHỞI CHẠY ĐỒNG BỘ KHI TẢI TRANG
-// ==========================================================================
+const container =
+document.getElementById(
+    "suggested-dishes"
+);
+
+if(!container) return;
+
+const foods = [
+
+    {
+        name:"🥗 Salad Ức Gà",
+        calo:250
+    },
+
+    {
+        name:"🍚 Cơm Gà Luộc",
+        calo:450
+    },
+
+    {
+        name:"🐟 Cá Hồi Áp Chảo",
+        calo:350
+    },
+
+    {
+        name:"🥣 Yến Mạch Sữa Chua",
+        calo:200
+    }
+
+];
+
+container.innerHTML =
+foods.map(food => `
+
+    <div class="food-card">
+
+        <div class="card-content">
+
+            <h3>${food.name}</h3>
+
+            <p>
+            🔥 ${food.calo} kcal
+            </p>
+
+        </div>
+
+    </div>
+
+`).join("");
+
+}
+
+
+// ĐỒNG BỘ TOÀN BỘ SỰ KIỆN KHI TRANG WEB TẢI XONG
 window.onload = function() {
     const dateInput = document.getElementById('history-date');
     const todayStr = new Date().toLocaleDateString('en-CA');
@@ -528,9 +591,10 @@ window.onload = function() {
         dateInput.value = todayStr;
     }
     
-    updateGreeting();   // Hàm này sẽ tự động ẩn/hiện và chạy loadSuggestedFoods() nếu có acc
-    loadUserBMI();       // Tự động kiểm tra và tải chỉ số BMI của nick đang lưu (nếu có)
+
+    updateGreeting();
     showDishes();
     renderDailyTable(todayStr);
     drawChart();
+    loadSuggestedFoods();
 };
