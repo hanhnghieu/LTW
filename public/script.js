@@ -279,17 +279,52 @@ function showDishes() {
             Calo: 650, 
             PhuongPhap: "Nướng", 
             MoTa: "Cơm tấm sườn nướng chất lượng", 
-            // Thay bằng link ảnh thật từ internet
             HinhAnh: "https://cdn.hstatic.net/files/200000626331/article/com-tam_9251d47b5b78450a9e09cbe8136fb181_1024x1024.png" 
         },
         { 
-            TenMonAn: "Ức gà Luộc", 
+            TenMonAn: "Ức gà luộc", 
             Calo: 250, 
             PhuongPhap: "Luộc", 
             MoTa: "Thực đơn hỗ trợ giảm cân, tăng cơ tốt", 
-            // Thay bằng link ảnh thật từ internet
-            HinhAnh: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=600" 
-        }
+            HinhAnh: "https://cdnv2.tgdd.vn/mwg-static/common/Common/Hinh%20thumb%20t01%201200676%20%2811%29.jpg" 
+        },
+        { 
+            TenMonAn: "Cá hồi áp chảo", 
+            Calo: 300, 
+            PhuongPhap: "Áp chảo", 
+            MoTa: "Giàu omega-3 và protein, tốt cho tim mạch và não bộ",
+            HinhAnh: "https://storage.googleapis.com/onelife-public/blog.onelife.vn/2026/03/ac4ce79c-ca-hoi-ap-chao-3.jpg" 
+        },
+          { 
+            TenMonAn: "Bông cải xanh hấp", 
+            Calo: 50, 
+            PhuongPhap: "Hấp", 
+            MoTa: "Giữ trọn vẹn vitamin, khoáng chất và chất xơ, hỗ trợ tiêu hóa",
+            HinhAnh: "https://img-global.cpcdn.com/recipes/6836c0e252fc1586/680x781cq80/bong-c%E1%BA%A3i-xanh-h%E1%BA%A5p-ch%E1%BA%A5m-s%E1%BB%91t-cay-recipe-main-photo.jpg" 
+        },
+          { 
+            TenMonAn: "Bò xào bông thiên lý", 
+            Calo: 220, 
+            PhuongPhap: "Xào", 
+            MoTa: "Cung cấp sắt và protein, giúp an thần và bổ máu",
+            HinhAnh: "https://i-giadinh.vnecdn.net/2022/07/02/Thanh-pham-1-1-2768-1656750998.jpg" 
+        },
+         { 
+            TenMonAn: "Thịt ba chỉ kho tiêu", 
+            Calo: 350, 
+            PhuongPhap: "Kho", 
+            MoTa: "Món ăn truyền thống đậm vị, giàu năng lượng và chất béo",
+            HinhAnh: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSs50Irk1GJRCcQXDJaWqN68-Rj8ehSia4FKw&s" 
+        },
+         { 
+            TenMonAn: "Khoai lang nướng", 
+            Calo: 150, 
+            PhuongPhap: "Nướng", 
+            MoTa: "Nguồn tinh bột hấp thu chậm, giàu chất xơ, hỗ trợ kiểm soát đường huyết",
+            HinhAnh: "https://file.hstatic.net/200000610729/article/khoai-lang-nuong_2ca1f44f98d54367a43cd3d02ba6015e_1024x1024.jpg" 
+        },
+        
+        
     ];
 
     const grid = document.getElementById('dishGrid');
