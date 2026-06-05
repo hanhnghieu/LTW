@@ -280,7 +280,7 @@ function showDishes() {
             PhuongPhap: "Nướng", 
             MoTa: "Cơm tấm sườn nướng chất lượng", 
             // Thay bằng link ảnh thật từ internet
-            HinhAnh: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=600" 
+            HinhAnh: "https://cdn.hstatic.net/files/200000626331/article/com-tam_9251d47b5b78450a9e09cbe8136fb181_1024x1024.png" 
         },
         { 
             TenMonAn: "Ức gà Luộc", 
