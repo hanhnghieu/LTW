@@ -189,7 +189,7 @@ if (addFoodForm) {
             toggleModal('modal-add');
             this.reset();
             
-            // Vẽ lại biểu đồ nếu đang mở tab Dashboard
+            // Vẽ lại biểu đồ nếu đang mở hoặc cần cập nhật dữ liệu ngầm
             drawChart();
         } catch (error) {
             console.error("Lỗi lưu dữ liệu:", error);
@@ -271,7 +271,6 @@ function showDishes() {
             Calo: 500, 
             PhuongPhap: "Luộc/Nấu nước", 
             MoTa: "Phở bò truyền thống thơm ngon", 
-            // Thay bằng link ảnh thật từ internet
             HinhAnh: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=600" 
         },
         { 
@@ -295,36 +294,34 @@ function showDishes() {
             MoTa: "Giàu omega-3 và protein, tốt cho tim mạch và não bộ",
             HinhAnh: "https://storage.googleapis.com/onelife-public/blog.onelife.vn/2026/03/ac4ce79c-ca-hoi-ap-chao-3.jpg" 
         },
-          { 
+        { 
             TenMonAn: "Bông cải xanh hấp", 
             Calo: 50, 
             PhuongPhap: "Hấp", 
             MoTa: "Giữ trọn vẹn vitamin, khoáng chất và chất xơ, hỗ trợ tiêu hóa",
             HinhAnh: "https://img-global.cpcdn.com/recipes/6836c0e252fc1586/680x781cq80/bong-c%E1%BA%A3i-xanh-h%E1%BA%A5p-ch%E1%BA%A5m-s%E1%BB%91t-cay-recipe-main-photo.jpg" 
         },
-          { 
+        { 
             TenMonAn: "Bò xào bông thiên lý", 
             Calo: 220, 
             PhuongPhap: "Xào", 
             MoTa: "Cung cấp sắt và protein, giúp an thần và bổ máu",
             HinhAnh: "https://i-giadinh.vnecdn.net/2022/07/02/Thanh-pham-1-1-2768-1656750998.jpg" 
         },
-         { 
+        { 
             TenMonAn: "Thịt ba chỉ kho tiêu", 
             Calo: 350, 
             PhuongPhap: "Kho", 
             MoTa: "Món ăn truyền thống đậm vị, giàu năng lượng và chất béo",
             HinhAnh: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSs50Irk1GJRCcQXDJaWqN68-Rj8ehSia4FKw&s" 
         },
-         { 
+        { 
             TenMonAn: "Khoai lang nướng", 
             Calo: 150, 
             PhuongPhap: "Nướng", 
             MoTa: "Nguồn tinh bột hấp thu chậm, giàu chất xơ, hỗ trợ kiểm soát đường huyết",
             HinhAnh: "https://file.hstatic.net/200000610729/article/khoai-lang-nuong_2ca1f44f98d54367a43cd3d02ba6015e_1024x1024.jpg" 
-        },
-        
-        
+        }
     ];
 
     const grid = document.getElementById('dishGrid');
@@ -342,11 +339,11 @@ function showDishes() {
         </div>
     `).join('');
 }
+
 function loadSuggestedFoods() {
     const container = document.getElementById("suggested-dishes");
-    const textTarget = document.getElementById("analysis-text"); // Tìm trực tiếp bằng ID cho chuẩn xác
+    const textTarget = document.getElementById("analysis-text"); 
     
-    // Nếu giao diện chưa có hoặc không tìm thấy vùng chứa, dừng lại luôn để tránh crash code
     if (!container) return;
 
     // 1. Lấy ngày hôm qua theo định dạng YYYY-MM-DD
@@ -359,7 +356,6 @@ function loadSuggestedFoods() {
     const yesterdayLogs = JSON.parse(localStorage.getItem(`logs_${yesterdayKey}`)) || [];
     let yesterdayTotalCalo = 0;
     yesterdayLogs.forEach(item => {
-        // Ép kiểu parseInt để phòng trường hợp dữ liệu lưu xuống bị biến thành chuỗi văn bản
         yesterdayTotalCalo += (parseInt(item.calo) || 0);
     });
 
@@ -393,7 +389,7 @@ function loadSuggestedFoods() {
         ];
     }
 
-    // 4. Hiển thị thông điệp phân tích lên giao diện (An toàn, không lo lệch layout)
+    // 4. Hiển thị thông điệp phân tích lên giao diện
     if (textTarget) {
         textTarget.innerText = analysisMessage;
     }
@@ -409,23 +405,6 @@ function loadSuggestedFoods() {
     `).join("");
 }
 
-    // 4. Hiển thị thông điệp phân tích lên giao diện (thay cho câu tĩnh)
-    // Bạn có thể đặt cho thẻ P hiển thị câu đó một cái id="analysis-text" trong HTML để tiện truy xuất, hoặc dùng tạm dòng dưới:
-    const textTarget = document.getElementById("analysis-text");
-    if (textTarget) {
-        textTarget.innerText = analysisMessage;
-    }
-
-    // 5. Render danh sách món ăn đề xuất ra màn hình
-    container.innerHTML = suggestedFoods.map(food => `
-        <div class="food-card">
-            <div class="card-content">
-                <h3>${food.name}</h3>
-                <p>🔥 ${food.calo} kcal</p>
-            </div>
-        </div>
-    `).join("");
-}
 function searchFood() {
     const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
     const cards = document.querySelectorAll("#dishGrid .food-card");
@@ -450,7 +429,7 @@ function calculateBMI() {
         return;
     }
 
-    // Cơ chế tự động sửa sai: Nếu nhập cm (ví dụ 170) -> Tự động chuyển về mét (1.70)
+    // Cơ chế tự động sửa sai: Nếu nhập cm -> Tự động chuyển về mét
     if (height > 3) {
         height = height / 100;
     }
@@ -490,7 +469,7 @@ let myCalorieChartInstance = null;
 
 function drawChart() {
     const ctx = document.getElementById("calorieChart");
-    if (!ctx) return;
+    if (!ctx) return; // Nếu phần tử canvas không tồn tại ở tab hiện tại, tránh lỗi
 
     if (typeof Chart === 'undefined') {
         console.error("Thư viện Chart.js chưa được tải thành công!");
@@ -509,7 +488,7 @@ function drawChart() {
 
         let total = 0;
         logs.forEach(item => {
-            total += item.calo;
+            total += (parseInt(item.calo) || 0);
         });
 
         days.push(date.toLocaleDateString("vi-VN", { day: 'numeric', month: 'numeric' }));
@@ -548,6 +527,7 @@ function drawChart() {
 // ==========================================================================
 function toggleModal(id) {
     const modal = document.getElementById(id);
+    if (modal) modal.style.background = "rgba(0,0,0,0.5)"; // Đảm bảo có backdrop mờ nếu chưa chỉnh css
     if (modal) modal.style.display = modal.style.display === "block" ? "none" : "block";
 }
 
@@ -585,4 +565,5 @@ window.addEventListener('load', function() {
     showDishes();
     renderDailyTable(todayStr);
     loadSuggestedFoods();
+    drawChart(); // Khởi tạo đồ thị ngầm trước
 });
