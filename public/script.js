@@ -344,16 +344,66 @@ function showDishes() {
 }
 function loadSuggestedFoods() {
     const container = document.getElementById("suggested-dishes");
+    const AnalysisTextElement = document.querySelector("#food-manager + div p, .tab-content p"); 
+    // Mẹo: tìm thẻ p chứa câu "Đang phân tích..." để cập nhật nội dung sinh động
+    
     if (!container) return;
 
-    const foods = [
-        { name: "🥗 Salad Ức Gà", calo: 250 },
-        { name: "🍚 Cơm Gà Luộc", calo: 450 },
-        { name: "🐟 Cá Hồi Áp Chảo", calo: 350 },
-        { name: "🥣 Yến Mạch Sữa Chua", calo: 200 }
-    ];
+    // 1. Lấy ngày hôm qua theo định dạng YYYY-MM-DD
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const yesterdayKey = yesterday.toLocaleDateString('en-CA');
 
-    container.innerHTML = foods.map(food => `
+    // 2. Tính tổng Calo đã ăn ngày hôm qua từ LocalStorage
+    const yesterdayLogs = JSON.parse(localStorage.getItem(`logs_${yesterdayKey}`)) || [];
+    let yesterdayTotalCalo = 0;
+    yesterdayLogs.forEach(item => {
+        yesterdayTotalCalo += item.calo;
+    });
+
+    // 3. Thiết lập các bộ thực đơn gợi ý dựa theo trạng thái dinh dưỡng
+    let suggestedFoods = [];
+    let analysisMessage = "";
+
+    if (yesterdayTotalCalo === 0) {
+        // Trường hợp hôm qua chưa ghi nhận món nào
+        analysisMessage = "Do hôm qua bạn chưa lưu nhật ký, Minty Diet gợi ý thực đơn cân bằng, lành mạnh cho ngày mới nhé! ✨";
+        suggestedFoods = [
+            { name: "🥗 Salad Ức Gà Mè Rang", calo: 250 },
+            { name: "🍚 Cơm Gà Luộc Tiêu Chanh", calo: 450 },
+            { name: "🐟 Cá Hồi Áp Chảo Măng Tây", calo: 350 },
+            { name: "🥣 Yến Mạch Sữa Chua Trái Cây", calo: 200 }
+        ];
+    } else if (yesterdayTotalCalo > 2500) {
+        // Trường hợp hôm qua nạp quá nhiều Calo (Cần thắt chặt hôm nay)
+        analysisMessage = `Hôm qua bạn đã nạp khá nhiều năng lượng (${yesterdayTotalCalo} kcal). Hôm nay chúng ta nên chọn các món thanh đạm, ít calo để cân bằng lại cơ thể nhé! 🌿`;
+        suggestedFoods = [
+            { name: "🥗 Salad Rau Củ Trộn Ức Gà", calo: 220 },
+            { name: "🥣 Yến Mạch Ngâm Sữa Tươi Không Đường", calo: 180 },
+            { name: "🥦 Canh Bông Cải Xanh Nấu Thịt Bằm", calo: 150 },
+            { name: "🍎 Một quả Táo Tây & Trà Xanh", calo: 80 }
+        ];
+    } else {
+        // Trường hợp ăn uống điều độ hoặc ăn ít (Cần giữ vững hoặc bù đắp)
+        analysisMessage = `Phân tích thấy hôm qua bạn duy trì năng lượng rất tốt (${yesterdayTotalCalo} kcal). Hôm nay hãy tiếp tục bổ sung các món giàu protein và chất béo tốt này nhé! 💪`;
+        suggestedFoods = [
+            { name: "🥩 Bò Né Bông Thiên Lý & Khoai Tây", calo: 520 },
+            { name: "🐟 Cá Hồi Áp Chảo Sốt Bơ Chanh", calo: 380 },
+            { name: "🍚 Cơm Gạo Lứt Lườn Gà Áp Chảo", calo: 420 },
+            { name: "🥚 2 Quả Trứng Gà Luộc & Chuối Tiêu", calo: 190 }
+        ];
+    }
+
+    // 4. Hiển thị thông điệp phân tích lên giao diện (thay cho câu tĩnh)
+    // Bạn có thể đặt cho thẻ P hiển thị câu đó một cái id="analysis-text" trong HTML để tiện truy xuất, hoặc dùng tạm dòng dưới:
+    const textTarget = document.getElementById("analysis-text");
+    if (textTarget) {
+        textTarget.innerText = analysisMessage;
+    }
+
+    // 5. Render danh sách món ăn đề xuất ra màn hình
+    container.innerHTML = suggestedFoods.map(food => `
         <div class="food-card">
             <div class="card-content">
                 <h3>${food.name}</h3>
@@ -362,7 +412,6 @@ function loadSuggestedFoods() {
         </div>
     `).join("");
 }
-
 function searchFood() {
     const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
     const cards = document.querySelectorAll("#dishGrid .food-card");
