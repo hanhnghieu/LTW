@@ -345,7 +345,16 @@ function loadSuggestedFoods() {
     const textTarget = document.getElementById("analysis-text"); 
     
     if (!container) return;
+    // Giả sử khi đăng nhập thành công, bạn lưu tên user vào localStorage hoặc biến currentUser
+    const currentUser = localStorage.getItem("currentUser"); 
 
+    if (!currentUser) {
+        // Nếu chưa đăng nhập, ẩn khối gợi ý thông minh đi và dừng hàm
+        if (smartSuggestionBlock) {
+            smartSuggestionBlock.style.display = 'none'; 
+        }
+        return; 
+    }
     // 1. Lấy ngày hôm qua theo định dạng YYYY-MM-DD
     const today = new Date();
     const yesterday = new Date(today);
