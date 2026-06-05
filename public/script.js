@@ -372,33 +372,40 @@ function showDishes() {
 
 function loadSuggestedFoods() {
     const container = document.getElementById("suggested-dishes");
-    const textTarget = document.getElementById("analysis-text"); 
+    const textTarget = document.getElementById("analysis-text");
+    const smartSuggestionBlock = document.getElementById("smart-suggestion"); // Khối bọc lớn của gợi ý
     
     if (!container) return;
-    // Giả sử khi đăng nhập thành công, bạn lưu tên user vào localStorage hoặc biến currentUser
-    const currentUser = localStorage.getItem("currentUser"); 
 
-    if (!currentUser) {
-        // Nếu chưa đăng nhập, ẩn khối gợi ý thông minh đi và dừng hàm
+    // 1. KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP QUA LOCALSTORAGE
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    if (!isLoggedIn) {
+        // Nếu CHƯA đăng nhập, ẩn toàn bộ khối gợi ý thông minh và dừng xử lý luôn
         if (smartSuggestionBlock) {
-            smartSuggestionBlock.style.display = 'none'; 
+            smartSuggestionBlock.style.display = 'none';
         }
         return; 
     }
-    // 1. Lấy ngày hôm qua theo định dạng YYYY-MM-DD
+
+    // 2. NẾU ĐÃ ĐĂNG NHẬP, CHO HIỆN KHỐI GỢI Ý VÀ TIẾN HÀNH PHÂN TÍCH DỮ LIỆU
+    if (smartSuggestionBlock) {
+        smartSuggestionBlock.style.display = 'block'; 
+    }
+
+    // Lấy ngày hôm qua định dạng YYYY-MM-DD
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
     const yesterdayKey = yesterday.toLocaleDateString('en-CA');
 
-    // 2. Tính tổng Calo đã ăn ngày hôm qua từ LocalStorage
+    // Tính tổng Calo đã ăn ngày hôm qua từ LocalStorage
     const yesterdayLogs = JSON.parse(localStorage.getItem(`logs_${yesterdayKey}`)) || [];
     let yesterdayTotalCalo = 0;
     yesterdayLogs.forEach(item => {
         yesterdayTotalCalo += (parseInt(item.calo) || 0);
     });
 
-    // 3. Thiết lập các bộ thực đơn gợi ý dựa theo trạng thái dinh dưỡng
     let suggestedFoods = [];
     let analysisMessage = "";
 
@@ -428,22 +435,21 @@ function loadSuggestedFoods() {
         ];
     }
 
-    // 4. Hiển thị thông điệp phân tích lên giao diện
+    // Hiển thị thông điệp phân tích
     if (textTarget) {
         textTarget.innerText = analysisMessage;
     }
 
-    // 5. Render danh sách món ăn đề xuất ra màn hình
+    // Đổ danh sách card món ăn đề xuất ra màn hình
     container.innerHTML = suggestedFoods.map(food => `
         <div class="food-card">
             <div class="card-content">
                 <h3>${food.name}</h3>
-                <p>🔥 ${food.calo} kcal</p>
+                <p style="color: #e67e22; font-weight: bold;">🔥 ${food.calo} kcal</p>
             </div>
         </div>
     `).join("");
 }
-
 function searchFood() {
     const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
     const cards = document.querySelectorAll("#dishGrid .food-card");
