@@ -266,9 +266,30 @@ function loadDailyMenu() {
 // ==========================================================================
 function showDishes() {
     const data = [
-        { TenMonAn: "Phở bò", Calo: 500, PhuongPhap: "Luộc/Nấu nước", MoTa: "Phở bò truyền thống thơm ngon", HinhAnh: "https://placehold.co/600x400?text=Pho+Bo" },
-        { TenMonAn: "Cơm tấm", Calo: 650, PhuongPhap: "Nướng", MoTa: "Cơm tấm sườn nướng chất lượng", HinhAnh: "https://placehold.co/600x400?text=Com+Tam" },
-        { TenMonAn: "Ức gà Luộc", Calo: 250, PhuongPhap: "Luộc", MoTa: "Thực đơn hỗ trợ giảm cân, tăng cơ tốt", HinhAnh: "https://placehold.co/600x400?text=Uc+Ga" }
+        { 
+            TenMonAn: "Phở bò", 
+            Calo: 500, 
+            PhuongPhap: "Luộc/Nấu nước", 
+            MoTa: "Phở bò truyền thống thơm ngon", 
+            // Thay bằng link ảnh thật từ internet
+            HinhAnh: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=600" 
+        },
+        { 
+            TenMonAn: "Cơm tấm", 
+            Calo: 650, 
+            PhuongPhap: "Nướng", 
+            MoTa: "Cơm tấm sườn nướng chất lượng", 
+            // Thay bằng link ảnh thật từ internet
+            HinhAnh: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=600" 
+        },
+        { 
+            TenMonAn: "Ức gà Luộc", 
+            Calo: 250, 
+            PhuongPhap: "Luộc", 
+            MoTa: "Thực đơn hỗ trợ giảm cân, tăng cơ tốt", 
+            // Thay bằng link ảnh thật từ internet
+            HinhAnh: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=600" 
+        }
     ];
 
     const grid = document.getElementById('dishGrid');
@@ -286,7 +307,6 @@ function showDishes() {
         </div>
     `).join('');
 }
-
 function loadSuggestedFoods() {
     const container = document.getElementById("suggested-dishes");
     if (!container) return;
