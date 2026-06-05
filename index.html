@@ -45,24 +45,20 @@
 
         <!-- TAB 1: TRANG CHỦ -->
         <section id="home" class="tab-content">
-            <!-- KHU VỰC GỢI Ý THÔNG MINH -->
-            <div class="suggestion-box" id="smart-suggestion">
-                <h3>💡 Gợi ý thực đơn hôm nay</h3>
-                <p id="suggestion-text">Đang phân tích dữ liệu dinh dưỡng hôm qua của bạn...</p>
-                <div class="grid-container" id="suggested-dishes">
-                    <!-- Các món gợi ý sẽ tự động nhảy vào đây từ JavaScript -->
-                </div>
+    <div class="suggestion-box" id="smart-suggestion" style="display: none;">
+        <h3>💡 Gợi ý thực đơn hôm nay</h3>
+        <p id="analysis-text">Đang phân tích dữ liệu dinh dưỡng hôm qua của bạn...</p>
+        <div class="grid-container" id="suggested-dishes">
             </div>
+        <hr style="margin: 30px 0; border: 0; border-top: 1px dashed #ccc;">
+    </div>
 
-            <hr style="margin: 30px 0; border: 0; border-top: 1px dashed #ccc;">
-
-            <div class="section-header">
-                <h2>📋 Danh sách món ăn tham khảo</h2>
-            </div>
-            <div class="grid-container" id="dishGrid">
-                <!-- Nơi hiển thị tất cả món ăn từ JS -->
-            </div>
-        </section>
+    <div class="section-header">
+        <h2>📋 Danh sách món ăn tham khảo</h2>
+    </div>
+    <div class="grid-container" id="dishGrid">
+        </div>
+</section>
 
         <!-- TAB 2: QUẢN LÝ DINH DƯỠNG (NHẬT KÝ) -->
         <section id="food-manager" class="tab-content" style="display: none;">
